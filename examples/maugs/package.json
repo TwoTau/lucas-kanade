@@ -1,0 +1,19 @@
+{
+  "private": true,
+  "name": "Math augmentations",
+  "description": "Living Papers example article with math augmentations.",
+  "repository": "uwdata/living-papers",
+  "scripts": {
+    "prebuild": "mkdirp build",
+    "build": "lpub -o build maugs.md"
+  },
+  "devDependencies": {
+    "@living-papers/cli": "*",
+    "@living-papers/components": "*",
+    "mkdirp": "^1.0.4"
+  },
+  "living-papers": {
+    "components": [
+    ]
+  }
+}

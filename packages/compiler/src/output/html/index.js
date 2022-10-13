@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { extractText, transformAST } from '@living-papers/ast';
 
 import { copy, mkdirp, readFile, writeFile } from '../../util/fs.js';
-import { crossref, header, section, sticky } from '../../plugins/index.js';
+import { crossref, header, maugs, section, sticky } from '../../plugins/index.js';
 import { resolveTemplate } from '../../resolve/templates.js';
 
 import { astToHTML } from './ast-to-html.js';
@@ -15,6 +15,7 @@ import { rollup } from './rollup.js';
 export default async function(ast, context, options) {
   const astHTML = await transformAST(ast, context, [
     crossref(context.numbered),
+    maugs,
     sticky,
     header,
     section
@@ -31,13 +32,14 @@ export async function outputHTML(ast, context, options) {
     cssFile = 'bundle.css',
     jsFile = 'bundle.js',
     template,
-    theme = 'default',
     baseURL = null,
     lang = 'en',
     dir = 'ltr',
     styles,
     ...rollupOptions
   } = options;
+
+  const theme = options.theme ?? options.metadata?.output?.html?.theme ?? 'default';
 
   // set up path variables
   const styleDir = fileURLToPath(new URL('../../../style', import.meta.url));

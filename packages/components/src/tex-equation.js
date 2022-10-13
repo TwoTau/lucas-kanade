@@ -4,7 +4,8 @@ export class TexEquation extends TexMath {
   static get properties() {
     return {
       type: {type: String},
-      nonumber: {type: Boolean}
+      nonumber: {type: Boolean},
+      definitions: {type: Array}
     };
   }
 
@@ -13,10 +14,11 @@ export class TexEquation extends TexMath {
     this.mode = 'display';
     this.type = 'align';
     this.nonumber = false;
+    this.definitions = this.hasAttribute('definitions') ? JSON.parse(this.getAttribute('definitions')) : [];
   }
 
   prepareMath() {
     const cmd = this.type + (this.nonumber ? '*' : '');
-    return `\\begin{${cmd}}\n${this.code}\n\\end{${cmd}}`;
+    return `\\begin{${cmd}}\n${super.prepareMath()}\n\\end{${cmd}}`;
   }
 }

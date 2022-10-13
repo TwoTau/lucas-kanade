@@ -15,11 +15,12 @@ export class TexMath extends DependentElement {
 
   static get properties() {
     return {
-      mode: {type: String},
-      code: {type: String},
-      leqno: {type: Boolean},
-      fleqn: {type: Boolean, converter: v => v !== 'false'},
-      minRuleThickness: {type: Number}
+      mode: { type: String },
+      code: { type: String },
+      leqno: { type: Boolean },
+      fleqn: { type: Boolean, converter: v => v !== 'false' },
+      minRuleThickness: { type: Number },
+      definitions: { type: Array }
     };
   }
 
@@ -28,6 +29,7 @@ export class TexMath extends DependentElement {
     this.mode = 'display';
     this.leqno = false;
     this.fleqn = false;
+    this.definitions = this.hasAttribute('definitions') ? JSON.parse(this.getAttribute('definitions')) : [];
   }
 
   initialChildNodes(nodes) {
@@ -37,8 +39,17 @@ export class TexMath extends DependentElement {
     }
   }
 
+  addAugmentations() {
+    let code = this.code;
+    for (let i = 0; i < this.definitions.length; i++) {
+      const { replace, symbol } = this.definitions[i];
+      code = code.replaceAll(replace, `\\htmlClass{maug maug-${i}}{${symbol}}`);
+    }
+    return code;
+  }
+
   prepareMath() {
-    return this.code;
+    return this.addAugmentations();
   }
 
   render() {
@@ -52,11 +63,27 @@ export class TexMath extends DependentElement {
       displayMode,
       leqno: this.leqno,
       fleqn: this.fleqn,
-      minRuleThickness: this.minRuleThickness
+      minRuleThickness: this.minRuleThickness,
+      trust: ({ command }) => command === '\\htmlClass',
+      strict: (errorCode) => errorCode === "htmlExtension" ? "ignore" : "warn",
     };
 
     const root = document.createElement(displayMode ? 'div' : 'span');
-    katex.render(this.prepareMath(), root, options);
+    const math = this.prepareMath();
+    katex.render(math, root, options);
+    setTimeout(() => {
+      const maugs = root.querySelectorAll('.enclosing');
+      for (const el of maugs) {
+        const index = +[...el.classList].find(c => c.startsWith('maug-')).slice('maug-'.length);
+        let { symbol, definition } = this.definitions[index];
+        symbol = symbol.replaceAll('@', '');
+        definition = definition.replaceAll('@', '');
+        el.addEventListener('click', () => {
+          console.log(`Symbol: ${symbol}\nDefinition: ${definition}`);
+        });
+        el.setAttribute("tabindex", 0);
+      }
+    }, 0);
     return root;
   }
 }

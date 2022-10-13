@@ -54,6 +54,12 @@
         "css": "css/range-text.css"
       },
       {
+        "name": "table-of-contents",
+        "import": "TableOfContents",
+        "file": "src/table-of-contents.js",
+        "css": "css/table-of-contents.css"
+      },
+      {
         "name": "tex-equation",
         "import": "TexEquation",
         "file": "src/tex-equation.js",

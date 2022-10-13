@@ -162,6 +162,7 @@ export class TexFormat {
       case 'references':
       case 'acknowledgments':
       case 'latex:preamble':
+      case 'definitions':
         return '';
       default:
         return `\\textbf{${ast.name}?}\n\n`;
@@ -295,13 +296,13 @@ export class TexFormat {
     // TODO throw error if interpolated?
     const mode = getPropertyValue(ast, 'mode');
     const displayMode = mode === 'display' || mode == null;
-    const code = getPropertyValue(ast, 'code') ?? ast.children[0].value;
+    const code = (getPropertyValue(ast, 'code') ?? ast.children[0].value).replaceAll('@', '');
     return displayMode ? `\\[${code}\\]` : `$${code}$`;
   }
 
   equation(ast) {
     // TODO throw error if interpolated?
-    const code = getPropertyValue(ast, 'code') ?? ast.children[0].value;
+    const code = (getPropertyValue(ast, 'code') ?? ast.children[0].value).replaceAll('@', '');
     const env = getPropertyValue(ast, 'type') || 'align';
     const nonum = bool(getPropertyValue(ast, 'nonumber'));
     return this.vspace(ast)

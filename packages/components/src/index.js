@@ -6,5 +6,6 @@ export { CrossRef } from './cross-ref.js';
 export { DependentElement } from './dependent-element.js';
 export { InlineNote } from './inline-note.js';
 export { RangeText } from './range-text.js';
+export { TableOfContents } from './table-of-contents.js';
 export { TexEquation } from './tex-equation.js';
 export { TexMath } from './tex-math.js';
