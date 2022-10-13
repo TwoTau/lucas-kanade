@@ -1,5 +1,5 @@
 import {
-  appendChildren, createComponentNode, createProperties, createTextNode, extractText, getNodeName, queryNodes, replaceChild, visitNodes
+  appendChildren, createComponentNode, createProperties, createTextNode, extractText, getNodeName, getPropertyValue, queryNodes, replaceChild, visitNodes
 } from '@living-papers/ast';
 
 // TODO pass in from context?
@@ -28,33 +28,46 @@ export default function (ast) {
   const headings = queryNodes(ast, (node) => /^h\d$/i.test(getNodeName(node)))
     .map(node => ({
       level: +getNodeName(node)[1],
-      title: extractText(node)
-    }));
+      title: extractText(node),
+      id: getPropertyValue(node, 'id'),
+    }))
   // console.log(JSON.stringify(headings));
 
   // Verify that headings are in order
   let warnings = [];
-  let tocChildren = [createComponentNode('ul', null, [])];
+  let tocChildren = [createComponentNode('ol', null, [])];
+  let prevLevel = 0;
   for (let i = 1; i < headings.length; i++) {
-    const currLevel = headings[i].level;
-    const prevLevel = headings[i - 1].level;
-    if (currLevel > prevLevel + 1) {
-      warnings.push(` * H${currLevel} "${headings[i].title}" has a H${prevLevel} parent heading.`);
-      continue;
+    let { level, title, id } = headings[i];
+    if (level > prevLevel + 1) {
+      warnings.push(` * H${level} "${headings[i].title}" has H${prevLevel} parent "${headings[i - 1].title}". Treating as H${prevLevel + 1}`);
+      level = prevLevel + 1;
     }
 
-    // TODO: nesting
-    const li = createComponentNode('li', null, [createTextNode(headings[i].title)]);
-    tocChildren.push(li);
+    const ol = createComponentNode('ol', null, []);
+    let textEl = createTextNode(title);
+    if (id) {
+      textEl = createComponentNode(
+        'a',
+        id ? createProperties({ href: `#${id}` }) : null,
+        [textEl]
+      );
+    }
+    const li = createComponentNode('li', null, [textEl, ol]);
+
+    while (tocChildren.length > level) {
+      tocChildren.pop();
+    }
+    appendChildren(tocChildren[tocChildren.length - 1], li);
+    tocChildren.push(ol);
+    prevLevel = level;
   }
   if (warnings.length) {
     console.warn('Accessibility warnings in table of contents:');
     console.warn(warnings.join('\n'));
   }
 
-
-  const toc = createComponentNode('table-of-contents', createProperties({ yay: 5 }), tocChildren)
-  // console.log(JSON.stringify(toc));
+  const toc = createComponentNode('table-of-contents', createProperties({ class: 'margin' }), [tocChildren[0]])
   appendChildren(ast, toc);
 
   return ast;

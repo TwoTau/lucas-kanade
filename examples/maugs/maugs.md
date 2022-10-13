@@ -7,7 +7,7 @@ output:
   html:
     selfContained: true
     styles: styles.css
-    theme: acm
+    theme: default
 ---
 
 ::: abstract
@@ -29,6 +29,8 @@ G(@x) :: The second stereo image
 F(@x + @h) :: The best translated F(@x) to approximate G(@x)
 ~~~
 
+##### super long heading that spans multiple lines and requires wrapping {#wraps}
+
 ## Heading 2
 
 ~~~ definitions
@@ -48,8 +50,18 @@ so that
 
 ###### thing
 
+### yay
+
 ## Heading 3
 
 ~~~ equation {#e2}
 @h = \frac{G(@x) - F(@x)}{F'(@x)}
 ~~~
+
+### 3.1
+
+### 3.2
+
+#### 3.2.1
+
+yay
