@@ -1,6 +1,15 @@
+table-of-contents {
+	position: fixed;
+	top: calc(2 * var(--article-padding));
+	left: calc(var(--article-margin-left) - var(--toc-width));
+	
+	/* background: #00ff0044; */
+	backdrop-filter: blur(4px);
+}
+
 table-of-contents ol {
 	width: fit-content;
-	max-width: 290px;
+	max-width: var(--toc-width);
 	margin: 0;
 	padding-left: 0;
 	list-style: none;

@@ -1,11 +1,16 @@
 /* Only handles layout, e.g. no color styles */
 :root {
-	--max-article-width: 100ex;
+	--max-article-width: 110ex;
 	--article-padding: 32px;
+	--toc-width: 300px;
 	--margin-width: 400px;
 	--gap-width: 100px;
-	--article-width: min(var(--max-article-width), calc(100vw - var(--article-padding) * 2 - var(--gap-width) - var(--margin-width)));
-	--article-margin-left: max(0px, calc(((100vw - var(--article-width) - var(--gap-width) - var(--margin-width)) / 2)));
+	--article-width: min(var(--max-article-width), calc(100vw - var(--article-padding) * 2 - var(--gap-width) * 2 - var(--toc-width) - var(--margin-width)));
+	--article-margin-left: max(0px, calc(((100vw + var(--toc-width) - var(--article-width) - var(--gap-width) * 2 - var(--margin-width)) / 2)));
+	/*
+	 * Layout looks like:
+	 * | <space> | toc-width | gap-width | article-width | gap-width | margin-width | <space> |
+	 */
 }
 
 html {
@@ -170,6 +175,18 @@ header {
 
 footer {
 	padding: 2em 0;
+}
+
+/* remove table of contents */
+@media (max-width: 1600px) {
+	:root {
+		--article-width: min(var(--max-article-width), calc(100vw - var(--article-padding) * 2 - var(--gap-width) - var(--margin-width)));
+		--article-margin-left: max(0px, calc(((100vw - var(--article-width) - var(--gap-width) - var(--margin-width)) / 2)));
+	}
+
+	table-of-contents {
+		display: none;
+	}
 }
 
 @media (max-width: 1100px) {

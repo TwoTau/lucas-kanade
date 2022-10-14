@@ -7,6 +7,8 @@ export class TableOfContents extends ArticleElement {
   }
 
   render() {
+    console.log(this.__children);
+
     return html`<nav role="navigation">
       <strong>Contents</strong>
       ${this.__children}

@@ -1,5 +1,5 @@
 import {
-  appendChildren, createComponentNode, createProperties, createTextNode, extractText, getNodeName, getPropertyValue, queryNodes, replaceChild, visitNodes
+  appendChildren, createComponentNode, createProperties, createTextNode, extractText, getNodeName, getPropertyValue, prependChildren, queryNodes, replaceChild, visitNodes
 } from '@living-papers/ast';
 
 // TODO pass in from context?
@@ -67,8 +67,8 @@ export default function (ast) {
     console.warn(warnings.join('\n'));
   }
 
-  const toc = createComponentNode('table-of-contents', createProperties({ class: 'margin' }), [tocChildren[0]])
-  appendChildren(ast, toc);
+  const toc = createComponentNode('table-of-contents', createProperties({ }), [tocChildren[0]])
+  prependChildren(ast, toc);
 
   return ast;
 }
