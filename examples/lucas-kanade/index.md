@@ -57,7 +57,7 @@ The translational image registration problem can be characterized as follows: We
 
 ::: figure {#fig1}
 ```js
-html`<img src="assets/fig1.png" style="width:50%;">`;
+html`<img src="assets/fig1.svg" style="width:50%;">`;
 ```
 | The image registration problem.
 :::
@@ -313,7 +313,7 @@ The notation we use is illustrated in @fig:fig3. Let $c$ be the vector of camera
 
 ::: figure {#fig3}
 ```js
-html`<img src="assets/fig3.png" style="width:50%;">`;
+html`<img src="assets/fig3.svg" style="width:50%;">`;
 ```
 | Stereo vision.
 :::
