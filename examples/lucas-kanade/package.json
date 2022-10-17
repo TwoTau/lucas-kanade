@@ -18,13 +18,5 @@
     "gh-pages": "^4.0.0",
     "mkdirp": "^1.0.4",
     "rimraf": "^3.0.2"
-  },
-  "living-papers": {
-    "components": [
-      {
-        "name": "math-annotation",
-        "file": "src/math-annotation.js"
-      }
-    ]
   }
 }

@@ -78,12 +78,53 @@ export class TexMath extends DependentElement {
         let { symbol, definition } = this.definitions[index];
         symbol = symbol.replaceAll('@', '');
         definition = definition.replaceAll('@', '');
-        el.addEventListener('click', () => {
-          console.log(`Symbol: ${symbol}\nDefinition: ${definition}`);
+        const maugWindow = document.createElement('span');
+        maugWindow.className = 'math-aug-window';
+        maugWindow.style.borderBottomColor = 'black';
+        katex.render(`${symbol}:\\text{${definition}}`, maugWindow, {
+          throwOnError: false,
+          displayMode: false,
+          leqno: this.leqno,
+          fleqn: this.fleqn,
+          minRuleThickness: this.minRuleThickness
+        });
+        el.addEventListener('focusout', () => {maugWindow.style.display = 'none';});
+        el.appendChild(maugWindow);
+        maugWindow.appendChild(createPointerLine(el, maugWindow, displayMode));
+        maugWindow.style.display = 'none';
+        el.addEventListener('click', (e) => {
+          maugWindow.style.display = 'inline-block';
+          e.stopImmediatePropagation();
         });
         el.setAttribute("tabindex", 0);
       }
     }, 0);
     return root;
   }
+}
+
+function createPointerLine(element, window, displayMode) {
+  const winRect = window.getBoundingClientRect();
+  const elrect = element.getBoundingClientRect();
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
+  const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+  const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  circle.setAttribute('cx', element.offsetWidth/2.0);
+  circle.setAttribute('cy', elrect.y - winRect.y - element.offsetHeight);
+  circle.setAttribute('r', 2);
+  line.setAttribute('stroke', 'black');
+  line.setAttribute('stroke-width', '1px');
+  line.setAttribute('x1', element.offsetWidth/2.0);
+  line.setAttribute('y1', elrect.y - winRect.y - element.offsetHeight);
+  line.setAttribute('x2', winRect.x - elrect.x + window.offsetWidth/2.0);
+  line.setAttribute('y2', displayMode ? 3:0);
+  svg.setAttribute('style',
+    `display:inline-block;position:absolute;
+    transform:translate(-${winRect.x - elrect.x + window.offsetWidth-4}px,
+    ${elrect.y - winRect.y - window.offsetHeight/2.0}px);
+    width:${winRect.x - elrect.x + window.offsetWidth}px;
+    height:${elrect.y - winRect.y - element.offsetHeight + 3}px;`);
+  svg.appendChild(line);
+  svg.appendChild(circle);
+  return svg
 }
