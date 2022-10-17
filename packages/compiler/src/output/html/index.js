@@ -153,8 +153,6 @@ function entryScript({ root, bind, context, components, runtime }) {
   const script = [];
   const refdata = context.citations?.references;
   const hasRefs = refdata?.length > 0;
-  const hasSticky = context.sticky;
-  const hasOnload = runtime || hasRefs || hasSticky;
 
   components.forEach(entry => {
     const spec = entry.default ? entry.import : `{ ${entry.import} }`;
@@ -165,11 +163,9 @@ function entryScript({ root, bind, context, components, runtime }) {
   const imports = [
     ...(runtime ? ['ObservableRuntime', 'hydrate'] : []),
     ...(hasRefs ? ['reference'] : []),
-    ...(hasSticky ? ['scrollManager'] : [])
+    'scrollManager'
   ];
-  if (imports.length) {
-    script.push(`import { ${imports.join(', ')} } from '@living-papers/runtime';`);
-  }
+  script.push(`import { ${imports.join(', ')} } from '@living-papers/runtime';`);
   if (runtime) {
     script.push(`import * as module from './runtime.js';`);
   }
@@ -178,21 +174,17 @@ function entryScript({ root, bind, context, components, runtime }) {
     script.push(`window.customElements.define('${entry.name}', ${entry.import});`);
   });
 
-  if (hasOnload) {
-    script.push(`
+  script.push(`
 window.addEventListener('DOMContentLoaded', () => {
   const root = document.querySelector('${root}');`);
-    if (hasRefs) {
-      script.push(`  reference(root, ${JSON.stringify(refdata)});`);
-    }
-    if (runtime) {
-      script.push(`  hydrate(new ObservableRuntime, root, module, ${JSON.stringify(bind)});`);
-    }
-    if (hasSticky) {
-      script.push('  scrollManager(root);');
-    }
-    script.push(`});`);
+  if (hasRefs) {
+    script.push(`  reference(root, ${JSON.stringify(refdata)});`);
   }
+  if (runtime) {
+    script.push(`  hydrate(new ObservableRuntime, root, module, ${JSON.stringify(bind)});`);
+  }
+  script.push('  scrollManager(root);');
+  script.push(`});`);
 
   return script.join('\n');
 }

@@ -1,0 +1,26 @@
+.maug {
+	display: inline-block;
+	cursor: pointer;
+}
+.maug:hover {
+	background: rgba(103, 176, 202, 0.22);
+}
+
+.maug-0 {
+	color: darkred;
+}
+.maug-1 {
+	color: green;
+}
+.maug-2 {
+	color: red;
+}
+.maug-3 {
+	color: blue;
+}
+.maug-4 {
+	color: purple;
+}
+.maug-5 {
+	color: sienna;
+}

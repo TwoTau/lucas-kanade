@@ -25,7 +25,7 @@ year: 1981
 doi: 10.5555/1623264.1623280
 output:
   html: 
-    styles: build/styles.css
+    styles: styles.css
     selfContained: true
 ---
 
