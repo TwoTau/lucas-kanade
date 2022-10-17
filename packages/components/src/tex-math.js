@@ -89,6 +89,14 @@ export class TexMath extends DependentElement {
           minRuleThickness: this.minRuleThickness
         });
         el.addEventListener('focusout', () => {maugWindow.style.display = 'none';});
+        el.addEventListener('keydown', (e) => {
+          if (e.key == 'Enter') {
+            maugWindow.style.display = 'inline-block';
+            e.stopImmediatePropagation();
+          } else if (e.key == 'Escape') {
+            maugWindow.style.display = 'none';
+          }
+        });
         el.appendChild(maugWindow);
         maugWindow.appendChild(createPointerLine(el, maugWindow, displayMode));
         maugWindow.style.display = 'none';
