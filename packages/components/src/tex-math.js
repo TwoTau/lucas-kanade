@@ -98,7 +98,7 @@ export class TexMath extends DependentElement {
         });
         el.setAttribute("tabindex", 0);
       }
-    }, 0);
+    }, 200);
     return root;
   }
 }
