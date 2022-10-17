@@ -15,7 +15,7 @@ export function scrollManager(root) {
   }
   stickys = stickys.filter(({ end }) => end);
 
-  const onScroll = () => {
+  function onScrollSticky() {
     let intersections = []; // starting and ending positions of each sticky element
     // allow side-by-side sticky elements if larger screen and one is in the margin and the other is not
     const isDesktop = !window.matchMedia('(max-width: 1100px)').matches;
@@ -60,6 +60,61 @@ export function scrollManager(root) {
       intersections.push([top, bottom, inMargin]);
       sticky.style.setProperty('transform', `translateY(${dy}px)`);
     }
-  };
-  window.addEventListener('scroll', onScroll, { passive: true });
+  }
+
+  const menuLinks = [];
+  const targets = [];
+  for (const link of document.querySelectorAll('table-of-contents a')) {
+    const target = document.getElementById(link.hash.slice(1));
+    if (target) {
+      const parents = [link.parentNode]; // <li> parents
+      let li;
+      do {
+        li = parents[parents.length - 1].parentNode.closest('li');
+        if (!li) {
+          break;
+        }
+        parents.push(li);
+      } while (li);
+      link.parents = parents;
+
+      menuLinks.push(link);
+      targets.push(target);
+    } else {
+      // Remove <a> tag
+      link.outerHTML = link.innerHTML;
+    }
+  }
+  targets.reverse();
+
+  const targetMargin = 10;
+  let activeIndex = -1;
+	let currentParent = null;
+
+  function onScrollTableOfContents() {
+    const current = targets.length - targets.findIndex((target) => window.scrollY >= target.offsetTop - targetMargin) - 1;
+
+		if (current !== activeIndex) {
+			if (currentParent) {
+				currentParent.classList.remove('active');
+        for (const parent of document.querySelectorAll('.active-parent')) {
+          parent.classList.remove('active-parent');
+        }
+			}
+			activeIndex = current;
+			if (menuLinks[current]) {
+				currentParent = menuLinks[current].parentElement;
+				currentParent.classList.add('active');
+
+        for (const parent of menuLinks[current].parents) {
+          parent.classList.add('active-parent');
+        }
+			}
+		}
+  }
+
+  window.addEventListener('scroll', () => {
+    onScrollSticky();
+    onScrollTableOfContents();
+  }, { passive: true });
 }

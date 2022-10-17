@@ -2,9 +2,9 @@ table-of-contents {
 	position: fixed;
 	top: calc(2 * var(--article-padding));
 	left: calc(var(--article-margin-left) - var(--toc-width));
-	
-	/* background: #00ff0044; */
-	backdrop-filter: blur(4px);
+	height: calc(100vh - 4 * var(--article-padding));
+	overflow-y: auto;
+	/* background: aquamarine; */
 }
 
 table-of-contents ol {
@@ -24,6 +24,18 @@ table-of-contents li {
 table-of-contents li:hover {
 	border-left-width: 4px;;
 	padding-left: 14px;
+}
+
+table-of-contents li.active {
+	border-color: black;
+}
+
+table-of-contents li.active-parent > a {
+	color: black;
+}
+
+table-of-contents li.active > a {
+	font-weight: bold;
 }
 
 table-of-contents a {
