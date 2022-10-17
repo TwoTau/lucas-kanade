@@ -1,0 +1,31 @@
+table-of-contents {
+	position: fixed;
+	top: calc(2 * var(--article-padding));
+	left: calc(var(--article-margin-left) - var(--toc-width));
+	
+	/* background: #00ff0044; */
+	backdrop-filter: blur(4px);
+}
+
+table-of-contents ol {
+	width: fit-content;
+	max-width: var(--toc-width);
+	margin: 0;
+	padding-left: 0;
+	list-style: none;
+}
+
+table-of-contents li {
+	margin: 1ex 0;
+	padding-left: 16px;
+	border-left: 2px solid #212e6d11;
+}
+
+table-of-contents li:hover {
+	border-left-width: 4px;;
+	padding-left: 14px;
+}
+
+table-of-contents a {
+	font-weight: inherit;
+}
