@@ -62,40 +62,38 @@ html`<img src="assets/fig1.svg">`;
 | The image registration problem.
 :::
 
-The translational image registration problem can be characterized as follows: We are given functions $F(@x)$ and $G(@x)$ which give the respective pixel values at each location $@x$ in two images, where $@x$ is a vector. We wish to find the disparity vector $@h$ which minimizes some measure of the difference between $F(@x + @h)$ and $G(@x)$, for $@x$ in some region of interest $@R$. (See @fig:fig1).
+The translational image registration problem can be characterized as follows: We are given functions $@F(@x)$ and $@G(@x)$ which give the respective pixel values at each location $@x$ in two images, where $@x$ is a vector. We wish to find the disparity vector $@h$ which minimizes some measure of the difference between $@F(@x + @h)$ and $@G(@x)$, for $@x$ in some region of interest $@R$. (See @fig:fig1).
 
 ~~~ definitions
-F(@x) :fx: The first stereo image
-F(x) :fx: The first stereo image
-G(@x) :gx: The second stereo image
-G(x) :gx: The second stereo image
-F(@x + @h) :fxh: The best translated $F(@x)$ to approximate $G(@x)$
-F(x + @h) :fxh: The best translated $F(@x)$ to approximate $G(@x)$
+@F :fx: First stereo image
+@G :gx: Second stereo image
+@F(@x + @h) :fxh: Best translated $@F(x)$ to approximate $@G(x)$
+@F(x + @h) :fxh: Best translated $@F(x)$ to approximate $@G(x)$
 ~~~
 
 ~~~ definitions
 @R :r: Region of interest
 ~~~
 
-Typical measures of the difference between $F(x + @h)$ and $G(x)$ are:
+Typical measures of the difference between $@F(x + @h)$ and $@G(x)$ are:
 
-- $L_1 \, \text{norm} = \sum_{x \varepsilon @R} | F(x + @h) - G(@x) |$
+- $L_1 \, \text{norm} = \sum_{x \varepsilon @R} | @F(x + @h) - @G(x) |$
 
-- $L_2 \, \text{norm} = (\sum_{x \varepsilon @R} [ F(x + @h) - G(@x) ]^2)^{\frac{1}{2}}$
+- $L_2 \, \text{norm} = (\sum_{x \varepsilon @R} [ @F(x + @h) - @G(x) ]^2)^{\frac{1}{2}}$
 
 - negative of normalized correlation
 ~~~ math
-= \frac{-\sum_{x \varepsilon @R} F(x + @h) G(x)}{(\sum_{x \varepsilon @R})^\frac{1}{2} (\sum_{x \varepsilon @R} G(x) ^2)^ \frac{1}{2}}
+= \frac{-\sum_{x \varepsilon @R} @F(x + @h) @G(x)}{(\sum_{x \varepsilon @R})^\frac{1}{2} (\sum_{x \varepsilon @R} @G(x) ^2)^ \frac{1}{2}}
 ~~~
 
 We will propose a more general measure of image difference, of which both the $L_2$ norm and the correlation are special cases. The $L_1$ norm is chiefly of interest as an inexpensive approximation to the $L_2$ norm.
 
 # Existing techniques {#sec3}
 
-An obvious technique for registering two images is to calculate a measure of the difference between the images at all possible values of the disparity vector $@h$—that is, to exhaustively search the space of possible values of $@h$. This technique is very time consuming: if the size of the picture $G(x)$ is $@N \times @N$, and the region of possible values of $@h$ is of size $@M \times @M$, then this method requires $O(@M^2 @N^2)$ time to compute.
+An obvious technique for registering two images is to calculate a measure of the difference between the images at all possible values of the disparity vector $@h$—that is, to exhaustively search the space of possible values of $@h$. This technique is very time consuming: if the size of the picture $@G(x)$ is $@N \times @N$, and the region of possible values of $@h$ is of size $@M \times @M$, then this method requires $O(@M^2 @N^2)$ time to compute.
 
 ~~~ definitions
-@N :n: Size of picture $G(x)$
+@N :n: Size of picture $@G(x)$
 @M :m: Size of the region of possible values of $@h$
 ~~~
 
@@ -113,7 +111,7 @@ Some registration algorithms employ a coarse-fine search strategy. See [@Moravec
 
 It should be nated that some of the techniques mentioned so far can be combined because they concern orthogonal aspects of the image registration problem. Hill climbing and exhaustive search concern only the order in which the algorithm searches for the best match, and SSDA specifies only the method used to calculate (an estimate of) the difference function. Thus for example, one could use the SSDA technique with either hill climbing or exhaustive search, in addition a coarse-fine strategy may be adopted.
 
-The algorithm we present specifies the order in which to search the space of possible $@h$'s. In particular, our technique starts with an initial estimate of $@h$, and it uses the spatial intensity gradient at each point of the image to modify the current estimate of $@h$ to obtain an $@h$ which yields a better match. This process is repeated in a kind of Newton-Raphson iteration. If the iteration converses, it will do so in $O(@M^2 \log @N)$ steps on the average. This registration technique can be combined with a coarse-fine strategy,since is requires an initial estimate of the approximate disparity $h$.
+The algorithm we present specifies the order in which to search the space of possible $@h$'s. In particular, our technique starts with an initial estimate of $@h$, and it uses the spatial intensity gradient at each point of the image to modify the current estimate of $@h$ to obtain an $@h$ which yields a better match. This process is repeated in a kind of Newton-Raphson iteration. If the iteration converses, it will do so in $O(@M^2 \log @N)$ steps on the average. This registration technique can be combined with a coarse-fine strategy,since is requires an initial estimate of the approximate disparity $@h$.
 
 # The registration algorithm {#sec4}
 
@@ -128,25 +126,25 @@ html`<img src="assets/fig2.svg">`;
 | Two curves to be matched.
 :::
 
-In the one-dimensional registration problem, we wish to find the horizontal disparity $@h$ between two curves $F(x)$ and $G(x) = F(x + @h)$. This is illustrated in @fig:fig2.
+In the one-dimensional registration problem, we wish to find the horizontal disparity $@h$ between two curves $@F(x)$ and $@G(x) = @F(x + @h)$. This is illustrated in @fig:fig2.
 
-Our solution to this problem depends on $F'(x)$, a linear approximation to the behavior of $F(x)$ in the neighborhood of $@x$, as do all subsequent solutions in this paper. In particular, for small $@h$,
+Our solution to this problem depends on $@F'(x)$, a linear approximation to the behavior of $@F(x)$ in the neighborhood of $@x$, as do all subsequent solutions in this paper. In particular, for small $@h$,
 
 ~~~ definitions
-F'(x) :fprimex: Linear approximation of $F(x)$ in the neighborhood of $@x$
+@F'(x) :fprimex: Linear approximation of $@F(x)$ in the neighborhood of $@x$
 ~~~
 
 ~~~ equation {#e1}
 \begin{align*}
-  F'(x) &\approx \frac{F(x + @h) - F(x)}{@h} \\
-  &= \frac{G(x) - F(x)}{@h}
+  @F'(x) &\approx \frac{@F(x + @h) - @F(x)}{@h} \\
+  &= \frac{@G(x) - @F(x)}{@h}
 \end{align*}
 ~~~
 
 so that
 
 ~~~ equation {#e2}
-@h = \frac{G(x) - F(x)}{F'(x)}
+@h = \frac{@G(x) - @F(x)}{@F'(x)}
 ~~~
 
 The success of our algorithm requires $@h$ to be small enough that this approximation is adequate. In section @sec:sec4_3 we will show how to extend the range of $@h$'s over which this approximation is adequate by smoothing the images.
@@ -154,60 +152,60 @@ The success of our algorithm requires $@h$ to be small enough that this approxim
 The approximation to $@h$ given in @eqn:e2 depends on $@x$. A natural method for combining the various estimates of $@h$ at various values of $@x$ would be to simply average them:
 
 ~~~ equation {#e3}
-@h \approx \sum_x \frac{G(x) - F(x)}{F'(x)} / \sum_x 1
+@h \approx \sum_x \frac{@G(x) - @F(x)}{@F'(x)} / \sum_x 1
 ~~~
 
-We can improve this average by realizing that the linear approximation in @eqn:e1 is good where $F(x)$ is nearly linear, and conversely is worse where $|F''(x)|$ is large. Thus we could weight the contribution of each term to the average in @eqn:e3 in inverse proportion to an estimate of $|F''(x)|$. One such estimate is
+We can improve this average by realizing that the linear approximation in @eqn:e1 is good where $@F(x)$ is nearly linear, and conversely is worse where $|F''(x)|$ is large. Thus we could weight the contribution of each term to the average in @eqn:e3 in inverse proportion to an estimate of $|F''(x)|$. One such estimate is
 
 ~~~ definitions
-F''(x) :fprimeprimex: TODO
-G'(x) :gprimex: TODO
+@F'' :fprimeprimex: Derivative of $@F'(x)$
+@G' :gprimex: Derivative of $@G(x)$
 ~~~
 
 ~~~ equation {#e4}
-F''(x) \approx \frac{G'(x) - F'(x)}{@h}
+@F''(x) \approx \frac{@G'(x) - @F'(x)}{@h}
 ~~~
 
 Since our estimate is to be used as a weight in an average, we can drop the constant factor of $\frac{1}{@h}$ in @eqn:e4, and use as our weighting function
 
 ~~~ equation {#e5}
-@w(x) = \frac{1}{|G'(x) - F(x)|}
+@w(x) = \frac{1}{|@G'(x) - @F(x)|}
 ~~~
 
 ~~~ definitions
 @w(x) :wx: weighting function
 ~~~
 
-This in fact appeals to our intuition: for example, in @fig:fig2, where the two curves cross, the estimate of $@h$ provided by @eqn:e2 is $0$, which is bad; fortunately, the weight given to this estimate in the average is small, since the difference between $F'(x)$ and $G'(x)$ at this point is large. The average with weighting is
+This in fact appeals to our intuition: for example, in @fig:fig2, where the two curves cross, the estimate of $@h$ provided by @eqn:e2 is $0$, which is bad; fortunately, the weight given to this estimate in the average is small, since the difference between $@F'(x)$ and $@G'(x)$ at this point is large. The average with weighting is
 
 ~~~ equation {#e6}
-@h \approx \sum_x \frac{@w(x)[G(x) - F(x)]}{F'(x)} / \sum_{x} @w(x)
+@h \approx \sum_x \frac{@w(x)[@G(x) - @F(x)]}{@F'(x)} / \sum_{x} @w(x)
 ~~~
 
 where $@w(x)$ is given by @eqn:e5.
 
-Having obtained this estimate. we can then move $F(x)$ by our estimate of $@h$, and repeat this procedure, yielding a type of Newton-Raphson iteration. Ideally, our sequence of estimates of $@h$ will converge to the best $@h$. This iteration is expressed by
+Having obtained this estimate. we can then move $@F(x)$ by our estimate of $@h$, and repeat this procedure, yielding a type of Newton-Raphson iteration. Ideally, our sequence of estimates of $@h$ will converge to the best $@h$. This iteration is expressed by
 
 ~~~ math
 @h_0 = 0,
 ~~~
 
 ~~~ equation {#e7}
-@h_{k+1} = @h_k + \sum_{x} \frac{@w(x)[G(x) - F(x + @h_k)]}{F'(x + @h_k)} / \sum_x @w(x)
+@h_{k+1} = @h_k + \sum_{x} \frac{@w(x)[@G(x) - @F(x + @h_k)]}{F'(x + @h_k)} / \sum_x @w(x)
 ~~~
 
 ## An alternative derivation {#sec4_2}
 
-The derivation given above does not generalize well to two dimensions because the two-dimensional linear approximation occurs in a different form. Moreover, @eqn:e2 is undefined where $F'(x) = 0$, i.e. where the curve is level. Both of these problems can be corrected by using the linear approximation of equation @eqn:e1 in the form
+The derivation given above does not generalize well to two dimensions because the two-dimensional linear approximation occurs in a different form. Moreover, @eqn:e2 is undefined where $@F'(x) = 0$, i.e. where the curve is level. Both of these problems can be corrected by using the linear approximation of equation @eqn:e1 in the form
 
 ~~~ equation {#e8}
-F(x + @h) \approx F(x) + @hF'(x)
+@F(x + @h) \approx @F(x) + @hF'(x)
 ~~~
 
 to find the $h$ which minimizes the $L_2$ norm measure of the difference between the curves:
 
 ~~~ math
-E = \sum_x [F(x + @h) - G(x)]^2
+E = \sum_x [@F(x + @h) - @G(x)]^2
 ~~~
 
 To minimize the error with respect to $@h$, we set
@@ -215,15 +213,15 @@ To minimize the error with respect to $@h$, we set
 ~~~ math
 \begin{align*}
   0 &= \frac{\partial E}{\partial @h} \\
-  &\approx \frac{\partial}{\partial @h} \sum_x [F(x) + @hF'(x) - G(x)]^2 \\
-  &= \sum_x 2F'(x)[F(x) + @hF'(x) - G(x)]
+  &\approx \frac{\partial}{\partial @h} \sum_x [@F(x) + @hF'(x) - @G(x)]^2 \\
+  &= \sum_x 2F'(x)[@F(x) + @h@F'(x) - @G(x)]
 \end{align*}
 ~~~
 
 from which
 
 ~~~ equation {#e9}
-@h \approx \frac{\sum_x F'(x)[G(x) - F(x)]}{\sum_x F'(x)^2}
+@h \approx \frac{\sum_x @F'(x)[@G(x) - @F(x)]}{\sum_x @F'(x)^2}
 ~~~
 
 This is essentially the same solution that we derived in @eqn:e6, but with the weighting function $@w(x) = F'(x)^2$. As we will see the form of the linear approximation we have used here generalizes to two or more dimensions. Moreover, we have avoided the problem of dividing by $0$, since in @eqn:e9 we will divide by $0$ only if $F'(x) = 0$ everywhere (in which case $@h$ really is undefined), whereas in @eqn:e3 we will divide by $0$ if $F'(x) = 0$ anywhere.
@@ -235,47 +233,47 @@ The iterative form with weighting corresponding to @eqn:e7 is
 ~~~
 
 ~~~ equation {#e10}
-@h_{k+1} = @h_k + \frac{\sum_x @w(x) F'(x + @h_k) [G(x) - F(x + @h_k)]}{\sum_x @w(x) F'(x + @h_k)^2}
+@h_{k+1} = @h_k + \frac{\sum_x @w(x) @F'(x + @h_k) [@G(x) - @F(x + @h_k)]}{\sum_x @w(x) @F'(x + @h_k)^2}
 ~~~
 
 where $@w(x)$ is given by @eqn:e5.
 
 ## Performance {#sec4_3}
 
-A natural question to ask is under what conditions and how fast the sequence of $h_k$'s converges to the real $h$. Consider the case:
+A natural question to ask is under what conditions and how fast the sequence of $@h_k$'s converges to the real $h$. Consider the case:
 
-$F(x) = \sin{x}$,
+$@F(x) = \sin{x}$,
 
-$G(x) = F(x + @h) = \sin{(x + @h)}$.
+$@G(x) = @F(x + @h) = \sin{(x + @h)}$.
 
 It can be shown that both versions of the registration algorithm given above will converge to the correct $@h$ for $|@h| < \pi$, that is, for initial misregistrations as large as one-half wavelength. This suggests that we can improve the range of convergence of the algorithm by suppressing high spatial frequencies in the image, which can be accomplished by smoothing the image, i.e. by replacing each pixel of the image by a weighted average of neighboring pixels. The tradeoff is that smoothing suppresses small details, and thus makes the match less accurate. If the smoothing window is much larger than the size of the object that we are trying to match, the object may be suppressed entirely, and so no match will be possible.
 
 Since lowpass filtered images can be sampled at lower resolution with no loss of information, the above observation suggests that we adopt a coarse-fine strategy. We can use a low resolution smoothed version of the image to obtain an approximate match. Applying the algorithm to higher resolution images will refine the match obtained at lower resolution.
 
-While the effect of smoothing is to extend the range of convergence, the weighting function serves to improve the accuracy of the approximation, and thus to speed up the convergence. Without weighting, i.e. with $@w(x) = 1$, the calculated disparity $@h_1$ of the first iteration of @eqn:e10 with $F(x) = \sin{x}$ falls off to zero as the disparity approaches one-half wavelength. However, with $@w(x)$ as in @eqn:e5, the calculation of disparity is much more accurate, and only falls off to zero at a disparity very near one-half wavelength. Thus with $@w(x)$ as in @eqn:e5 convergence is faster for large disparities.
+While the effect of smoothing is to extend the range of convergence, the weighting function serves to improve the accuracy of the approximation, and thus to speed up the convergence. Without weighting, i.e. with $@w(x) = 1$, the calculated disparity $@h_1$ of the first iteration of @eqn:e10 with $@F(x) = \sin{x}$ falls off to zero as the disparity approaches one-half wavelength. However, with $@w(x)$ as in @eqn:e5, the calculation of disparity is much more accurate, and only falls off to zero at a disparity very near one-half wavelength. Thus with $@w(x)$ as in @eqn:e5 convergence is faster for large disparities.
 
 ## Implementation {#sec4_4}
 
 Implementing @eqn:e10 requires calculating the weighted sums of the quantities $F'G$, $F'F$, and $(F')^2$ over the region of interest $@R$. We cannot calculate $F'(x)$ exactly, but for the purposes of this algorithm, we can estimate it by
 
 ~~~ math
-F'(x) \approx \frac{F(x + \Delta x) - F(x)}{\Delta x}
+@F'(x) \approx \frac{@F(x + \Delta x) - @F(x)}{\Delta x}
 ~~~
 
-and similarly for $G'(x)$, where we choose $\Delta x$ appropriately small (e.g. one pixel). Some more sophisticated technique could be used for estimating the first derivatives, but in general such techniques are equivalent to first smoothing the function, which we have proposed doing for other reasons, and then taking the difference.
+and similarly for $@G'(x)$, where we choose $\Delta x$ appropriately small (e.g. one pixel). Some more sophisticated technique could be used for estimating the first derivatives, but in general such techniques are equivalent to first smoothing the function, which we have proposed doing for other reasons, and then taking the difference.
 
 ## Generalization to multiple dimensions {#sec4_5}
 
 The one-dimensional registration algorithm given above can be generalized to two or more dimensions. We wish to minimize the $L_2$ norm measure of error:
 
 ~~~ math
-E = \sum_{x \varepsilon @R} [F(x + @h) - G(x)]^2
+E = \sum_{x \varepsilon @R} [@F(x + @h) - @G(x)]^2
 ~~~
 
 where $@x$ and $@h$ are $n$-dimensional row vectors. We make a linear approximation analogous to that in @eqn:e8,
 
 ~~~ math
-F(x + @h) \approx F(x) + @h \frac{\partial}{\partial x} F(x)
+@F(x + @h) \approx @F(x) + @h \frac{\partial}{\partial x} @F(x)
 ~~~
 
 where $\partial / \partial x$ is the gradient operator with respect to $x$, as a column vector:
@@ -289,44 +287,44 @@ Using this approximation, to minimize $E$, we set
 ~~~ math
 \begin{align*}
   0 &= \frac{\partial}{\partial @h} E \\
-  &\approx \frac{\partial}{\partial @h} \sum_x \left[ F(x) + @h \frac{\partial F}{\partial x} - G(x) \right]^2 \\
-  &= \sum_x 2 \frac{\partial F}{\partial x} \left[ F(@x) + @h \frac{\partial F}{\partial x} - G(x) \right]
+  &\approx \frac{\partial}{\partial @h} \sum_x \left[ @F(x) + @h \frac{\partial @F}{\partial x} - @G(x) \right]^2 \\
+  &= \sum_x 2 \frac{\partial @F}{\partial x} \left[ @F(@x) + @h \frac{\partial @F}{\partial x} - @G(x) \right]
 \end{align*}
 ~~~
 
 from which
 
 ~~~ math
-@h = \left[ \sum_x \left( \frac{\partial F}{\partial x} \right)^\top [G(x) - F(x)] \right] \left[ \sum_x \left( \frac{\partial F}{\partial x} \right)^\top \frac{\partial F}{\partial x} \right]^{-1}
+@h = \left[ \sum_x \left( \frac{\partial @F}{\partial x} \right)^\top [@G(x) - @F(x)] \right] \left[ \sum_x \left( \frac{\partial F}{\partial x} \right)^\top \frac{\partial @F}{\partial x} \right]^{-1}
 ~~~
 
 which has much the same form as the one-dimensional version in @eqn:e9.
 
-The discussions above of iteration, weighting, smoothing, and the coarse-fine technique with respect to the onedimensional case apply to the n-dimensional case as well. Calculating our estimate of $@h$ in the two-dimensional case requires accumulating the weighted sum of five products $((G - F)F_x, (G - F)F_y, F^2_x, F^2_y, \text{and } F_xF_y)$ over the region $@R$, as opposed to accumulating one product for correlation or the $L_2$ norm. However, this is more than compensated for, especially in high-resolution images, by evaluating these sums at fewer values of $@h$.
+The discussions above of iteration, weighting, smoothing, and the coarse-fine technique with respect to the onedimensional case apply to the n-dimensional case as well. Calculating our estimate of $@h$ in the two-dimensional case requires accumulating the weighted sum of five products $((@G - @F)@F_x, (@G - @F)@F_y, @F^2_x, @F^2_y, \text{and } @F_x @F_y)$ over the region $@R$, as opposed to accumulating one product for correlation or the $L_2$ norm. However, this is more than compensated for, especially in high-resolution images, by evaluating these sums at fewer values of $@h$.
 
 ## Further generalizations {#sec4.6}
 Our technique can be extended to registration between two images related not by a simple translation, but by an arbitrary linear transformation, such as rotation, scaling, and shearing. Such a relationship is expressed by
 
 ~~~ math
-G(x) = F(x@A + @h)
+@G(x) = @F(x@A + @h)
 ~~~
 
-where $@A$ is a matrix expressing the linear spatial tranformation between $F(x)$ and $G(x)$. The quantity to be minimized in this case is
+where $@A$ is a matrix expressing the linear spatial tranformation between $@F(x)$ and $@G(x)$. The quantity to be minimized in this case is
 
 ~~~ definitions
-@A :a: matrix representing linear transformation between $F(x)$ and $G(x)$
+@A :a: matrix representing linear transformation between $@F(x)$ and $@G(x)$
 ~~~
 
 ~~~ math
-E = \sum_x [F(x@A + @h) - G(x)]^2
+E = \sum_x [@F(x@A + @h) - @G(x)]^2
 ~~~
 
 To determine the amount $\Delta @A$ to adjust $@A$ and the amount $\Delta @h$ to adjust $@h$, we use the linear approximation
 
 ~~~ equation {#e11}
 \begin{align*}
-  & F(x(@A + \Delta @A) + (@h + \Delta @h)) \\
-  \approx& F(x@A + @h) + (x \Delta @A + \Delta @h) \frac{\partial}{\partial x} F(x)
+  & @F(x(@A + \Delta @A) + (@h + \Delta @h)) \\
+  \approx& @F(x@A + @h) + (x \Delta @A + \Delta @h) \frac{\partial}{\partial x} @F(x)
 \end{align*}
 ~~~
 
@@ -335,7 +333,7 @@ When we use this approximation the error expression again becomes quadratic in t
 This generalization is useful in applications such as stereovision, where the two different views of the object will be different views, due to the difference of the viewpoints of the cameras or to differences in the processing of the two images. If we model this difference as a linear transformation, we have (ignoring the registration problem for the moment)
 
 ~~~ math
-F(x) = @\alpha G(x) + @\beta
+@F(x) = @\alpha @G(x) + @\beta
 ~~~
 
 where $@\alpha$ may be thought of as a contrast adjustment and $@\beta$ as a brightness adjustment. Combining this with the general linear transformation registration problem, we obtain
@@ -346,7 +344,7 @@ where $@\alpha$ may be thought of as a contrast adjustment and $@\beta$ as a bri
 ~~~
 
 ~~~ math
-E = \sum_x [F(x@A + @h) - (@\alpha G(x) + @\beta)]^2
+E = \sum_x [@F(x@A + @h) - (@\alpha @G(x) + @\beta)]^2
 ~~~
 
 as the quantity to minimize with respect to $@\alpha$, $@\beta$, $@A$, and $@h$. The minimization of this quantity, using the linear approximation in equation @eqn:e11, is straightforward. This is the general form promised in section @sec:sec2. If we ignore $@A$, minimizing this quantity is equivalent to maximizing the correlation coefficient (see, for example, [@Dudewicz1976]); if we ignore $@\alpha$ and $@\beta$ as well, minimizing this form is equivalent to minimizing the $L_2$ norm.
@@ -367,7 +365,7 @@ Many stereo vision systems concern themselves only with calculating the distance
 
 ## A mathematical characterization {#sec5_2}
 
-The notation we use is illustrated in @fig:fig3. Let $c$ be the vector of camera parameters that describe the orientation and position of camera 2 with respect to camera 1's coordinate system. These parameters are azimuth, elevation, pan, tilt, and roll, as defined in @Gennery1979. Let $x$ denote the position of an image in the camera 1 film plane of an object. Suppose the object is at a distance $z$ from camera 1. Given the position in picture 1 $x$ and distance $z$ of the object, we could directly calculate the position $p(x, z)$ that it must have occupied in three-space. We express $p$ with respect to camera 1's coordinate system so that $p$ does not depend on the orientation of camera 1. The object would appear on camera 2's film plane at a position $q(p, c)$ that is dependent on the object's position in three-space $p$ and on the camera parameters $c$. Let $G(x)$ be the intensity value of pixel $x$ in picture 1, and let $F(q)$ the intensity value of pixel $q$ in picture 2. The goal of a stereo vision system is to invert the relationship described above and solve for $c$ and $z$, given $x$, $F$ and $G$.
+The notation we use is illustrated in @fig:fig3. Let $c$ be the vector of camera parameters that describe the orientation and position of camera 2 with respect to camera 1's coordinate system. These parameters are azimuth, elevation, pan, tilt, and roll, as defined in @Gennery1979. Let $x$ denote the position of an image in the camera 1 film plane of an object. Suppose the object is at a distance $z$ from camera 1. Given the position in picture 1 $x$ and distance $z$ of the object, we could directly calculate the position $p(x, z)$ that it must have occupied in three-space. We express $p$ with respect to camera 1's coordinate system so that $p$ does not depend on the orientation of camera 1. The object would appear on camera 2's film plane at a position $q(p, c)$ that is dependent on the object's position in three-space $p$ and on the camera parameters $c$. Let $@G(x)$ be the intensity value of pixel $x$ in picture 1, and let $@F(q)$ the intensity value of pixel $q$ in picture 2. The goal of a stereo vision system is to invert the relationship described above and solve for $c$ and $z$, given $x$, $@F$ and $@G$.
 
 ::: figure {#fig3 .center}
 ```js
@@ -378,9 +376,9 @@ html`<img src="assets/fig3.svg" style="width:50%;">`;
 
 ## Applying the registration algorithm {#sec5_3}
 
-First consider the case where we know the exact camera parameters $c$, and we wish to discover the distance $z$ of an object. Suppose we have an estimate of the distance $z$. We wish to see what happens to the quality of our match between $F$ and $G$ as we vary $z$ by an amount $\Delta z$. The linear approximation that we use here is:
+First consider the case where we know the exact camera parameters $c$, and we wish to discover the distance $z$ of an object. Suppose we have an estimate of the distance $z$. We wish to see what happens to the quality of our match between $@F$ and $@G$ as we vary $z$ by an amount $\Delta z$. The linear approximation that we use here is:
 
-$F(z + \Delta z) \approx F(z) + \Delta \frac{\partial F}{\partial z}$,
+$@F(z + \Delta z) \approx @F(z) + \Delta \frac{\partial F}{\partial z}$,
 
 where
 
@@ -388,36 +386,36 @@ where
 \frac{\partial F}{\partial z} = \frac{\partial p}{\partial z} \frac{\partial q}{\partial p} \frac{\partial F}{\partial q}
 ~~~
 
-This equation is due to the chain rule of the gradient operator; $\partial q / \partial p$ is a matrix of partial derivatives of the components of $q$ with respect to the components of $p$, and $\partial F / \partial q$ is the spatial intensity gradient of the image $F(q)$. To update our estimate of $z$, we want to find the $\Delta z$ which satisfies
+This equation is due to the chain rule of the gradient operator; $\partial q / \partial p$ is a matrix of partial derivatives of the components of $q$ with respect to the components of $p$, and $\partial @F / \partial q$ is the spatial intensity gradient of the image $@F(q)$. To update our estimate of $z$, we want to find the $\Delta z$ which satisfies
 
 ~~~ math
-0 = \frac{\partial}{\partial \Delta z} E \approx \frac{\partial}{\partial \Delta z} \sum_x [F + \Delta z \frac{\partial F}{\partial \Delta z} - G]^2
+0 = \frac{\partial}{\partial \Delta z} E \approx \frac{\partial}{\partial \Delta z} \sum_x [@F + \Delta z \frac{\partial @F}{\partial \Delta z} - @G]^2
 ~~~
 
 Solving for $\delta z$, we obtain
 
 ~~~ math
-\delta z = \sum_x \frac{\partial F}{\partial \Delta z} [G - F] / \sum_x \left( \frac{\partial F}{\partial z} \right)^2
+\delta z = \sum_x \frac{\partial @F}{\partial \Delta z} [@G - @F] / \sum_x \left( \frac{\partial @F}{\partial z} \right)^2
 ~~~
 
-where $\frac{\partial F}{\partial z}$ is given by @eqn:e12.
+where $\frac{\partial @F}{\partial z}$ is given by @eqn:e12.
 
 On the other hand. suppose we know the distances $z_i, i = 1, 2, \dots, n$, of each of $n$ objects from camera 1, but we don't know the exact camera parameters $c$. We wish to determine the effect of changing our estimate of the camera parameters by an amount $\Delta c$. Using the linear approximation
 
 ~~~ math
-F(c + \Delta c) \approx F(c) + \Delta c \frac{\partial q}{\partial c} \frac{\partial F}{\partial q}
+@F(c + \Delta c) \approx @F(c) + \Delta c \frac{\partial q}{\partial c} \frac{\partial @F}{\partial q}
 ~~~
 
 we solve the minimization of the error function with respect to $\Delta c$ by setting
 
 ~~~ math
-0 = \frac{\partial}{\partial \Delta c} \sum_i \sum_{x \varepsilon R_i} [F(c + \Delta c) - G]^2 \approx \frac{\partial}{\partial \Delta c} \sum_i \sum_{x} [F + \Delta c \frac{\partial q}{\partial c} \frac{\partial F}{\partial q} - G]^2
+0 = \frac{\partial}{\partial \Delta c} \sum_i \sum_{x \varepsilon R_i} [@F(c + \Delta c) - G]^2 \approx \frac{\partial}{\partial \Delta c} \sum_i \sum_{x} [@F + \Delta c \frac{\partial q}{\partial c} \frac{\partial @F}{\partial q} - @G]^2
 ~~~
 
 obtaining
 
 ~~~ math
-\Delta c \approx \left[\sum_x \left(\frac{\partial q}{\partial c} \frac{\partial F}{\partial q} \right)^\top [G-F] \right] \left[ \left(\frac{\partial q}{\partial c} \frac{\partial F}{\partial q} \right)^\top \left(\frac{\partial q}{\partial c} \frac{\partial F}{\partial q} \right) \right]^{-1}
+\Delta c \approx \left[\sum_x \left(\frac{\partial q}{\partial c} \frac{\partial @F}{\partial q} \right)^\top [@G - @F] \right] \left[ \left(\frac{\partial q}{\partial c} \frac{\partial @F}{\partial q} \right)^\top \left(\frac{\partial q}{\partial c} \frac{\partial @F}{\partial q} \right) \right]^{-1}
 ~~~
 
 As with the other techniques derived in this paper, weighting and iteration improve the solutions for $\Delta z$ and $\Delta c$ derived above.
