@@ -125,7 +125,7 @@ function createPointerLine(element, window, displayMode) {
   line.setAttribute('x1', element.offsetWidth/2.0);
   line.setAttribute('y1', elrect.y - winRect.y - element.offsetHeight);
   line.setAttribute('x2', winRect.x - elrect.x + window.offsetWidth/2.0);
-  line.setAttribute('y2', displayMode ? 3:0);
+  line.setAttribute('y2', displayMode ? 6:4);
   svg.setAttribute('style',
     `display:inline-block;position:absolute;
     transform:translate(-${winRect.x - elrect.x + window.offsetWidth-4}px,
