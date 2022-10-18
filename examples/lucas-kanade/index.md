@@ -155,7 +155,7 @@ The approximation to $@h$ given in @eqn:e2 depends on $@x$. A natural method for
 @h \approx \sum_x \frac{@G(x) - @F(x)}{@F'(x)} / \sum_x 1
 ~~~
 
-We can improve this average by realizing that the linear approximation in @eqn:e1 is good where $@F(x)$ is nearly linear, and conversely is worse where $|F''(x)|$ is large. Thus we could weight the contribution of each term to the average in @eqn:e3 in inverse proportion to an estimate of $|F''(x)|$. One such estimate is
+We can improve this average by realizing that the linear approximation in @eqn:e1 is good where $@F(x)$ is nearly linear, and conversely is worse where $|@F''(x)|$ is large. Thus we could weight the contribution of each term to the average in @eqn:e3 in inverse proportion to an estimate of $|@F''(x)|$. One such estimate is
 
 ~~~ definitions
 @F'' :fprimeprimex: Derivative of $@F'(x)$
@@ -191,7 +191,7 @@ Having obtained this estimate. we can then move $@F(x)$ by our estimate of $@h$,
 ~~~
 
 ~~~ equation {#e7}
-@h_{k+1} = @h_k + \sum_{x} \frac{@w(x)[@G(x) - @F(x + @h_k)]}{F'(x + @h_k)} / \sum_x @w(x)
+@h_{k+1} = @h_k + \sum_{x} \frac{@w(x)[@G(x) - @F(x + @h_k)]}{@F'(x + @h_k)} / \sum_x @w(x)
 ~~~
 
 ## An alternative derivation {#sec4_2}
@@ -199,7 +199,7 @@ Having obtained this estimate. we can then move $@F(x)$ by our estimate of $@h$,
 The derivation given above does not generalize well to two dimensions because the two-dimensional linear approximation occurs in a different form. Moreover, @eqn:e2 is undefined where $@F'(x) = 0$, i.e. where the curve is level. Both of these problems can be corrected by using the linear approximation of equation @eqn:e1 in the form
 
 ~~~ equation {#e8}
-@F(x + @h) \approx @F(x) + @hF'(x)
+@F(x + @h) \approx @F(x) + @h @F'(x)
 ~~~
 
 to find the $h$ which minimizes the $L_2$ norm measure of the difference between the curves:
@@ -210,11 +210,11 @@ E = \sum_x [@F(x + @h) - @G(x)]^2
 
 To minimize the error with respect to $@h$, we set
 
-~~~ math
+~~~ equation
 \begin{align*}
   0 &= \frac{\partial E}{\partial @h} \\
-  &\approx \frac{\partial}{\partial @h} \sum_x [@F(x) + @hF'(x) - @G(x)]^2 \\
-  &= \sum_x 2F'(x)[@F(x) + @h@F'(x) - @G(x)]
+  &\approx \frac{\partial}{\partial @h} \sum_x [@F(x) + @h @F'(x) - @G(x)]^2 \\
+  &= \sum_x 2 @F'(x)[@F(x) + @h@F'(x) - @G(x)]
 \end{align*}
 ~~~
 
@@ -224,7 +224,7 @@ from which
 @h \approx \frac{\sum_x @F'(x)[@G(x) - @F(x)]}{\sum_x @F'(x)^2}
 ~~~
 
-This is essentially the same solution that we derived in @eqn:e6, but with the weighting function $@w(x) = F'(x)^2$. As we will see the form of the linear approximation we have used here generalizes to two or more dimensions. Moreover, we have avoided the problem of dividing by $0$, since in @eqn:e9 we will divide by $0$ only if $F'(x) = 0$ everywhere (in which case $@h$ really is undefined), whereas in @eqn:e3 we will divide by $0$ if $F'(x) = 0$ anywhere.
+This is essentially the same solution that we derived in @eqn:e6, but with the weighting function $@w(x) = @F'(x)^2$. As we will see the form of the linear approximation we have used here generalizes to two or more dimensions. Moreover, we have avoided the problem of dividing by $0$, since in @eqn:e9 we will divide by $0$ only if $@F'(x) = 0$ everywhere (in which case $@h$ really is undefined), whereas in @eqn:e3 we will divide by $0$ if $@F'(x) = 0$ anywhere.
 
 The iterative form with weighting corresponding to @eqn:e7 is
 
@@ -254,7 +254,7 @@ While the effect of smoothing is to extend the range of convergence, the weighti
 
 ## Implementation {#sec4_4}
 
-Implementing @eqn:e10 requires calculating the weighted sums of the quantities $F'G$, $F'F$, and $(F')^2$ over the region of interest $@R$. We cannot calculate $F'(x)$ exactly, but for the purposes of this algorithm, we can estimate it by
+Implementing @eqn:e10 requires calculating the weighted sums of the quantities $@F' @G$, $@F' @F$, and $(@F')^2$ over the region of interest $@R$. We cannot calculate $@F'(x)$ exactly, but for the purposes of this algorithm, we can estimate it by
 
 ~~~ math
 @F'(x) \approx \frac{@F(x + \Delta x) - @F(x)}{\Delta x}
@@ -306,7 +306,7 @@ The discussions above of iteration, weighting, smoothing, and the coarse-fine te
 Our technique can be extended to registration between two images related not by a simple translation, but by an arbitrary linear transformation, such as rotation, scaling, and shearing. Such a relationship is expressed by
 
 ~~~ math
-@G(x) = @F(x@A + @h)
+@G(x) = @F(x @A + @h)
 ~~~
 
 where $@A$ is a matrix expressing the linear spatial tranformation between $@F(x)$ and $@G(x)$. The quantity to be minimized in this case is
