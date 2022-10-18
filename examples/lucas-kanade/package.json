@@ -10,8 +10,8 @@
     "build": "lpub -o build --tempDir='.temp' index.md",
     "prewatch": "npm run assets",
     "watch": "lpub -o build --tempDir='.temp' --watch index.md",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "predeploy": "rimraf ../../docs",
+    "deploy": "cp build ../../docs -r"
   },
   "devDependencies": {
     "@living-papers/cli": "^0.0.5",

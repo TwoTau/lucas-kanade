@@ -74,8 +74,8 @@ export class TexMath extends DependentElement {
     setTimeout(() => {
       const maugs = root.querySelectorAll('.enclosing');
       for (const el of maugs) {
-        const index = +[...el.classList].find(c => c.startsWith('maug-')).slice('maug-'.length);
-        let { symbol, definition } = this.definitions[index];
+        const id = [...el.classList].find(c => c.startsWith('maug-')).slice('maug-'.length);
+        let { symbol, definition } = this.definitions.find(d => d.id === id);
         symbol = symbol.replaceAll('@', '');
         definition = definition.replaceAll('@', '');
         const maugWindow = document.createElement('span');

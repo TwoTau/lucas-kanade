@@ -30,25 +30,22 @@
 	background: rgba(103, 176, 202, 0.22);
 }
 
-.maug-0 {
-	color: darkred;
-}
-
-.maug-1 {
-	color: green;
-}
-
-.maug-2 {
-	color: red;
-}
-
-.maug-3 {
-	color: blue;
-}
-
-.maug-4 {
-	color: purple;
-}
+.maug-fxh { color: blue; }
+.maug-dxh { color: darkblue; }
+.maug-fprimeprimex { color: darkred; }
+.maug-alpha { color: palevioletred; }
+.maug-beta { color: rebeccapurple; }
+.maug-fx { color: blue; }
+.maug-gx { color: darkgreen; }
+.maug-fprimex { color: darkblue; }
+.maug-gprimex { color: darkolivegreen; }
+.maug-wx { color: darkred; }
+.maug-h { color: purple; }
+.maug-x { color: red; }
+.maug-r { color: orange; }
+.maug-n { color: sienna; }
+.maug-m { color: sienna; }
+.maug-a { color: darkred; }
 
 .maug-5 {
 	color: sienna;

@@ -38,8 +38,8 @@ Converted to Living Papers format by Tu Nguyen and Vishal Devireddy for CSE 599D
 :::
 
 ~~~ definitions
-@h :: disparity vector
-@x :: position vector in an image
+@h :h: disparity vector
+@x :x: position vector in an image
 ~~~
 
 ::: abstract
@@ -65,16 +65,16 @@ html`<img src="assets/fig1.svg">`;
 The translational image registration problem can be characterized as follows: We are given functions $F(@x)$ and $G(@x)$ which give the respective pixel values at each location $@x$ in two images, where $@x$ is a vector. We wish to find the disparity vector $@h$ which minimizes some measure of the difference between $F(@x + @h)$ and $G(@x)$, for $@x$ in some region of interest $@R$. (See @fig:fig1).
 
 ~~~ definitions
-F(@x) :: The first stereo image
-F(x) :: The first stereo image
-G(@x) :: The second stereo image
-G(x) :: The second stereo image
-F(@x + @h) :: The best translated $F(@x)$ to approximate $G(@x)$
-F(x + @h) :: The best translated $F(@x)$ to approximate $G(@x)$
+F(@x) :fx: The first stereo image
+F(x) :fx: The first stereo image
+G(@x) :gx: The second stereo image
+G(x) :gx: The second stereo image
+F(@x + @h) :fxh: The best translated $F(@x)$ to approximate $G(@x)$
+F(x + @h) :fxh: The best translated $F(@x)$ to approximate $G(@x)$
 ~~~
 
 ~~~ definitions
-@R :: Region of interest
+@R :r: Region of interest
 ~~~
 
 Typical measures of the difference between $F(x + @h)$ and $G(x)$ are:
@@ -95,8 +95,8 @@ We will propose a more general measure of image difference, of which both the $L
 An obvious technique for registering two images is to calculate a measure of the difference between the images at all possible values of the disparity vector $@h$—that is, to exhaustively search the space of possible values of $@h$. This technique is very time consuming: if the size of the picture $G(x)$ is $@N \times @N$, and the region of possible values of $@h$ is of size $@M \times @M$, then this method requires $O(@M^2 @N^2)$ time to compute.
 
 ~~~ definitions
-@N :: Size of picture $G(x)$
-@M :: Size of the region of possible values of $@h$
+@N :n: Size of picture $G(x)$
+@M :m: Size of the region of possible values of $@h$
 ~~~
 
 Speedup at the risk of possible failure to find the best $@h$ can be achieved by using a hill-climbing technique. This technique begins with an initial estimate $@h_0$ of the disparity. To obtain the next guess from the current guess $@h_k$, one evaluates the difference function at all points in a small (say, $3 \times 3$) neighborhood of $h_k$ and takes as the next guess $@h_{k+1}$ that point which minimizes the difference function. As with all hill-climbing techniques, this method suffers from the  problem of false peaks: the local optimum that one attains may not be the global optimum. This technique operates in $O(@M^2 @N)$ time on the average, for $@M$ and $@N$ as above.
@@ -106,7 +106,7 @@ Another technique, known as the sequential similarity detection algorithm (SSDA)
 Note that in SSDA if we adopt as our threshold the minimum error we have found among the $@h$ examined so far, we obtain an algorithm similar to alpha-beta pruning in minmax game trees [@Nilsson1971]. Here we take advantage of the fact that in evaluating $\min_{@h} \sum_x d(x, @h)$, where $d(x, @h)$ is the contribution of pixel $@x$ at disparity $@h$ to the total error, the $\sum_x$ can only increase as we look at more $x$'s (more pixels).
 
 ~~~ definitions
-d(x, @h) :: contribution of pixel $@x$ at disparity $@h$ to the total error
+d(x, @h) :dxh: contribution of pixel $@x$ at disparity $@h$ to the total error
 ~~~
 
 Some registration algorithms employ a coarse-fine search strategy. See [@Moravec1979] for an example. One of the techniques discussed above is used to find the best registration for the images at low resolution, and the low resolution match is then used to constrain the region of possible matches examined at higher resolution. The coarse-fine strategy is adopted implicitly by some image understanding systems which work with a "pyramid" of images of the same scene at various resolutions.
@@ -133,7 +133,7 @@ In the one-dimensional registration problem, we wish to find the horizontal disp
 Our solution to this problem depends on $F'(x)$, a linear approximation to the behavior of $F(x)$ in the neighborhood of $@x$, as do all subsequent solutions in this paper. In particular, for small $@h$,
 
 ~~~ definitions
-F'(x) :: Linear approximation of $F(x)$ in the neighborhood of $@x$
+F'(x) :fprimex: Linear approximation of $F(x)$ in the neighborhood of $@x$
 ~~~
 
 ~~~ equation {#e1}
@@ -160,8 +160,8 @@ The approximation to $@h$ given in @eqn:e2 depends on $@x$. A natural method for
 We can improve this average by realizing that the linear approximation in @eqn:e1 is good where $F(x)$ is nearly linear, and conversely is worse where $|F''(x)|$ is large. Thus we could weight the contribution of each term to the average in @eqn:e3 in inverse proportion to an estimate of $|F''(x)|$. One such estimate is
 
 ~~~ definitions
-F''(x) :: TODO
-G'(x) :: TODO
+F''(x) :fprimeprimex: TODO
+G'(x) :gprimex: TODO
 ~~~
 
 ~~~ equation {#e4}
@@ -175,7 +175,7 @@ Since our estimate is to be used as a weight in an average, we can drop the cons
 ~~~
 
 ~~~ definitions
-@w(x) :: weighting function
+@w(x) :wx: weighting function
 ~~~
 
 This in fact appeals to our intuition: for example, in @fig:fig2, where the two curves cross, the estimate of $@h$ provided by @eqn:e2 is $0$, which is bad; fortunately, the weight given to this estimate in the average is small, since the difference between $F'(x)$ and $G'(x)$ at this point is large. The average with weighting is
@@ -314,7 +314,7 @@ G(x) = F(x@A + @h)
 where $@A$ is a matrix expressing the linear spatial tranformation between $F(x)$ and $G(x)$. The quantity to be minimized in this case is
 
 ~~~ definitions
-@A :: matrix representing linear transformation between $F(x)$ and $G(x)$
+@A :a: matrix representing linear transformation between $F(x)$ and $G(x)$
 ~~~
 
 ~~~ math
@@ -341,8 +341,8 @@ F(x) = @\alpha G(x) + @\beta
 where $@\alpha$ may be thought of as a contrast adjustment and $@\beta$ as a brightness adjustment. Combining this with the general linear transformation registration problem, we obtain
 
 ~~~ definitions
-@\alpha :: contrast adjustment
-@\beta :: brightness adjustment
+@\alpha :alpha: contrast adjustment
+@\beta :beta: brightness adjustment
 ~~~
 
 ~~~ math
