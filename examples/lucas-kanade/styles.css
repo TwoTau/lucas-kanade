@@ -1,7 +1,31 @@
+/* :root {
+	--margin-width: 0px;
+}
+
+@media (max-width: 1600px) {
+	:root {
+		--article-width: min(var(--max-article-width), calc(100vw - var(--article-padding) * 2 - var(--gap-width) - var(--toc-width) - var(--margin-width)));
+		--article-margin-left: max(0px, calc(((100vw + var(--toc-width) - var(--article-width) - var(--gap-width) - var(--margin-width)) / 2)));
+	}
+
+	table-of-contents {
+		display: initial;
+	}
+} */
+
+.sticky:has(#fig2) {
+	top: 32px;
+}
+
+.maug {
+	color: blueviolet;
+}
+
 .maug {
 	display: inline-block;
 	cursor: pointer;
 }
+
 .maug:hover {
 	background: rgba(103, 176, 202, 0.22);
 }
@@ -9,18 +33,23 @@
 .maug-0 {
 	color: darkred;
 }
+
 .maug-1 {
 	color: green;
 }
+
 .maug-2 {
 	color: red;
 }
+
 .maug-3 {
 	color: blue;
 }
+
 .maug-4 {
 	color: purple;
 }
+
 .maug-5 {
 	color: sienna;
 }

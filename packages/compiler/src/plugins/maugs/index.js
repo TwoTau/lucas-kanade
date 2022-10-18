@@ -10,17 +10,20 @@ export default function (ast) {
         .map(child => extractText(child).trim().split('\n'))
         .flat()
         .map(line => {
-          const parts = line.split('::');
-          if (parts.length != 2) {
+          const parts = line.split(':');
+          if (parts.length != 3) {
             // TODO: handle incorrect parsing
             return null;
           }
           let replace = parts[0].trim();
+          let id = parts[1].trim() || null;
+          let definition = parts[2].trim();
           let symbol = replace[0] === "@" ? replace.slice(1) : replace;
           return {
             replace,
             symbol,
-            definition: parts[1].trim(),
+            id,
+            definition,
           };
         });
       definitions = definitions.concat(lines);
@@ -29,6 +32,9 @@ export default function (ast) {
   });
 
   // TODO: sort definitions so that superstrings are before substrings
+  definitions
+    .sort((b, a) => a.symbol.length - b.symbol.length)
+    .map((d, i) => ({ ...d, id: d.id || i}));
 
   definitions = JSON.stringify(definitions);
 

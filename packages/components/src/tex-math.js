@@ -42,8 +42,8 @@ export class TexMath extends DependentElement {
   addAugmentations() {
     let code = this.code;
     for (let i = 0; i < this.definitions.length; i++) {
-      const { replace, symbol } = this.definitions[i];
-      code = code.replaceAll(replace, `\\htmlClass{maug maug-${i}}{${symbol}}`);
+      const { replace, symbol, id } = this.definitions[i];
+      code = code.replaceAll(replace, `\\htmlClass{maug maug-${id}}{${symbol}}`);
     }
     return code;
   }
