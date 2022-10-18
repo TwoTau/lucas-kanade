@@ -30,11 +30,15 @@ output:
 ---
 
 ::: aside
-Converted to Living Papers format by Tu Nguyen and Vishal Devireddy for CSE 599D.
+Converted to the Living Papers format by  
+Tu Nguyen and Vishal Devireddy for CSE 599D.
 
-[Source code](https://github.com/TwoTau/lucas-kanade)
+Today, this 1981 paper is known for introducing the  
+[Lucas–Kanade method](https://en.wikipedia.org/wiki/Lucas%E2%80%93Kanade_method) for optical flow estimation.
 
-[Original paper](https://courses.cs.duke.edu/spring19/compsci527/papers/Lucas.pdf)
+[Source code (GitHub)](https://github.com/TwoTau/lucas-kanade)
+
+[Original paper (PDF)](https://courses.cs.duke.edu/spring19/compsci527/papers/Lucas.pdf)
 :::
 
 ~~~ definitions
@@ -66,7 +70,9 @@ The translational image registration problem can be characterized as follows: We
 
 ~~~ definitions
 @F :fx: First stereo image
+@F(x) :fx: First stereo image
 @G :gx: Second stereo image
+@G(x) :gx: Second stereo image
 @F(@x + @h) :fxh: Best translated $@F(x)$ to approximate $@G(x)$
 @F(x + @h) :fxh: Best translated $@F(x)$ to approximate $@G(x)$
 ~~~
@@ -131,6 +137,7 @@ In the one-dimensional registration problem, we wish to find the horizontal disp
 Our solution to this problem depends on $@F'(x)$, a linear approximation to the behavior of $@F(x)$ in the neighborhood of $@x$, as do all subsequent solutions in this paper. In particular, for small $@h$,
 
 ~~~ definitions
+@F' :fprimex: Linear approximation of $@F(x)$ in the neighborhood of $@x$
 @F'(x) :fprimex: Linear approximation of $@F(x)$ in the neighborhood of $@x$
 ~~~
 
@@ -159,7 +166,9 @@ We can improve this average by realizing that the linear approximation in @eqn:e
 
 ~~~ definitions
 @F'' :fprimeprimex: Derivative of $@F'(x)$
+@F''(x) :fprimeprimex: Derivative of $@F'(x)$
 @G' :gprimex: Derivative of $@G(x)$
+@G'(x) :gprimex: Derivative of $@G(x)$
 ~~~
 
 ~~~ equation {#e4}
@@ -202,17 +211,17 @@ The derivation given above does not generalize well to two dimensions because th
 @F(x + @h) \approx @F(x) + @h @F'(x)
 ~~~
 
-to find the $h$ which minimizes the $L_2$ norm measure of the difference between the curves:
+to find the $@h$ which minimizes the $L_2$ norm measure of the difference between the curves:
 
 ~~~ math
-E = \sum_x [@F(x + @h) - @G(x)]^2
+@E = \sum_x [@F(x + @h) - @G(x)]^2
 ~~~
 
 To minimize the error with respect to $@h$, we set
 
 ~~~ equation
 \begin{align*}
-  0 &= \frac{\partial E}{\partial @h} \\
+  0 &= \frac{\partial @E}{\partial @h} \\
   &\approx \frac{\partial}{\partial @h} \sum_x [@F(x) + @h @F'(x) - @G(x)]^2 \\
   &= \sum_x 2 @F'(x)[@F(x) + @h@F'(x) - @G(x)]
 \end{align*}
@@ -267,7 +276,7 @@ and similarly for $@G'(x)$, where we choose $\Delta x$ appropriately small (e.g.
 The one-dimensional registration algorithm given above can be generalized to two or more dimensions. We wish to minimize the $L_2$ norm measure of error:
 
 ~~~ math
-E = \sum_{x \varepsilon @R} [@F(x + @h) - @G(x)]^2
+@E = \sum_{x \varepsilon @R} [@F(x + @h) - @G(x)]^2
 ~~~
 
 where $@x$ and $@h$ are $n$-dimensional row vectors. We make a linear approximation analogous to that in @eqn:e8,
@@ -282,20 +291,20 @@ where $\partial / \partial x$ is the gradient operator with respect to $x$, as a
 \frac{\partial}{\partial x} = \left[ \frac{\partial}{\partial x_1} \frac{\partial}{\partial x_2} \dots \frac{\partial}{\partial x_n} \right]^\top
 ~~~
 
-Using this approximation, to minimize $E$, we set
+Using this approximation, to minimize $@E$, we set
 
 ~~~ math
 \begin{align*}
-  0 &= \frac{\partial}{\partial @h} E \\
+  0 &= \frac{\partial}{\partial @h} @E \\
   &\approx \frac{\partial}{\partial @h} \sum_x \left[ @F(x) + @h \frac{\partial @F}{\partial x} - @G(x) \right]^2 \\
-  &= \sum_x 2 \frac{\partial @F}{\partial x} \left[ @F(@x) + @h \frac{\partial @F}{\partial x} - @G(x) \right]
+  &= \sum_x 2 \frac{\partial @F}{\partial x} \left[ @F(x) + @h \frac{\partial @F}{\partial x} - @G(x) \right]
 \end{align*}
 ~~~
 
 from which
 
 ~~~ math
-@h = \left[ \sum_x \left( \frac{\partial @F}{\partial x} \right)^\top [@G(x) - @F(x)] \right] \left[ \sum_x \left( \frac{\partial F}{\partial x} \right)^\top \frac{\partial @F}{\partial x} \right]^{-1}
+@h = \left[ \sum_x \left( \frac{\partial @F}{\partial x} \right)^\top [@G(x) - @F(x)] \right] \left[ \sum_x \left( \frac{\partial @F}{\partial x} \right)^\top \frac{\partial @F}{\partial x} \right]^{-1}
 ~~~
 
 which has much the same form as the one-dimensional version in @eqn:e9.
@@ -316,7 +325,7 @@ where $@A$ is a matrix expressing the linear spatial tranformation between $@F(x
 ~~~
 
 ~~~ math
-E = \sum_x [@F(x@A + @h) - @G(x)]^2
+@E = \sum_x [@F(x@A + @h) - @G(x)]^2
 ~~~
 
 To determine the amount $\Delta @A$ to adjust $@A$ and the amount $\Delta @h$ to adjust $@h$, we use the linear approximation
@@ -344,7 +353,7 @@ where $@\alpha$ may be thought of as a contrast adjustment and $@\beta$ as a bri
 ~~~
 
 ~~~ math
-E = \sum_x [@F(x@A + @h) - (@\alpha @G(x) + @\beta)]^2
+@E = \sum_x [@F(x@A + @h) - (@\alpha @G(x) + @\beta)]^2
 ~~~
 
 as the quantity to minimize with respect to $@\alpha$, $@\beta$, $@A$, and $@h$. The minimization of this quantity, using the linear approximation in equation @eqn:e11, is straightforward. This is the general form promised in section @sec:sec2. If we ignore $@A$, minimizing this quantity is equivalent to maximizing the correlation coefficient (see, for example, [@Dudewicz1976]); if we ignore $@\alpha$ and $@\beta$ as well, minimizing this form is equivalent to minimizing the $L_2$ norm.
@@ -365,7 +374,18 @@ Many stereo vision systems concern themselves only with calculating the distance
 
 ## A mathematical characterization {#sec5_2}
 
-The notation we use is illustrated in @fig:fig3. Let $c$ be the vector of camera parameters that describe the orientation and position of camera 2 with respect to camera 1's coordinate system. These parameters are azimuth, elevation, pan, tilt, and roll, as defined in @Gennery1979. Let $x$ denote the position of an image in the camera 1 film plane of an object. Suppose the object is at a distance $z$ from camera 1. Given the position in picture 1 $x$ and distance $z$ of the object, we could directly calculate the position $p(x, z)$ that it must have occupied in three-space. We express $p$ with respect to camera 1's coordinate system so that $p$ does not depend on the orientation of camera 1. The object would appear on camera 2's film plane at a position $q(p, c)$ that is dependent on the object's position in three-space $p$ and on the camera parameters $c$. Let $@G(x)$ be the intensity value of pixel $x$ in picture 1, and let $@F(q)$ the intensity value of pixel $q$ in picture 2. The goal of a stereo vision system is to invert the relationship described above and solve for $c$ and $z$, given $x$, $@F$ and $@G$.
+~~~ definitions
+@z :z: distance of object
+@p :p: object's position on camera 1's film plane
+@q :q: object's position on camera 2's film plane
+@c :c: vector of camera 2's parameters with respect to camera 1
+@@x :xx: position of image in camera 1 film plane
+@@G :gg: intensity value of pixel in picture 1
+@@F :ff: intensity value of pixel in picture 2
+@E :error: Error to minimize
+~~~
+
+The notation we use is illustrated in @fig:fig3. Let $c$ be the vector of camera parameters that describe the orientation and position of camera 2 with respect to camera 1's coordinate system. These parameters are azimuth, elevation, pan, tilt, and roll, as defined in @Gennery1979. Let $@@x$ denote the position of an image in the camera 1 film plane of an object. Suppose the object is at a distance $@z$ from camera 1. Given the position in picture 1 $@@x$ and distance $@z$ of the object, we could directly calculate the position $@p(@@x, @z)$ that it must have occupied in three-space. We express $@p$ with respect to camera 1's coordinate system so that $p$ does not depend on the orientation of camera 1. The object would appear on camera 2's film plane at a position $@q(@p, @c)$ that is dependent on the object's position in three-space $@p$ and on the camera parameters $@c$. Let $@@G(@@x)$ be the intensity value of pixel $@@x$ in picture 1, and let $@@F(@q)$ the intensity value of pixel $@q$ in picture 2. The goal of a stereo vision system is to invert the relationship described above and solve for $@c$ and $@z$, given $@x$, $@@F$ and $@@G$.
 
 ::: figure {#fig3 .center}
 ```js
@@ -376,78 +396,53 @@ html`<img src="assets/fig3.svg" style="width:50%;">`;
 
 ## Applying the registration algorithm {#sec5_3}
 
-First consider the case where we know the exact camera parameters $c$, and we wish to discover the distance $z$ of an object. Suppose we have an estimate of the distance $z$. We wish to see what happens to the quality of our match between $@F$ and $@G$ as we vary $z$ by an amount $\Delta z$. The linear approximation that we use here is:
+First consider the case where we know the exact camera parameters $@c$, and we wish to discover the distance $@z$ of an object. Suppose we have an estimate of the distance $@z$. We wish to see what happens to the quality of our match between $@@F$ and $@@G$ as we vary $@z$ by an amount $\Delta @z$. The linear approximation that we use here is:
 
-$@F(z + \Delta z) \approx @F(z) + \Delta \frac{\partial F}{\partial z}$,
+$@@F(@z + \Delta @z) \approx @@F(z) + \Delta \frac{\partial @@F}{\partial @z}$,
 
 where
 
 ~~~ equation {#e12}
-\frac{\partial F}{\partial z} = \frac{\partial p}{\partial z} \frac{\partial q}{\partial p} \frac{\partial F}{\partial q}
+\frac{\partial @@F}{\partial z} = \frac{\partial @p}{\partial @z} \frac{\partial @q}{\partial @p} \frac{\partial @@F}{\partial @q}
 ~~~
 
-This equation is due to the chain rule of the gradient operator; $\partial q / \partial p$ is a matrix of partial derivatives of the components of $q$ with respect to the components of $p$, and $\partial @F / \partial q$ is the spatial intensity gradient of the image $@F(q)$. To update our estimate of $z$, we want to find the $\Delta z$ which satisfies
+This equation is due to the chain rule of the gradient operator; $\partial @q / \partial @p$ is a matrix of partial derivatives of the components of $@q$ with respect to the components of $@p$, and $\partial @F / \partial @q$ is the spatial intensity gradient of the image $@F(@q)$. To update our estimate of $@z$, we want to find the $\Delta @z$ which satisfies
 
 ~~~ math
-0 = \frac{\partial}{\partial \Delta z} E \approx \frac{\partial}{\partial \Delta z} \sum_x [@F + \Delta z \frac{\partial @F}{\partial \Delta z} - @G]^2
+0 = \frac{\partial}{\partial \Delta @z} @E \approx \frac{\partial}{\partial \Delta @z} \sum_x [@@F + \Delta @z \frac{\partial @@F}{\partial \Delta @z} - @@G]^2
 ~~~
 
-Solving for $\delta z$, we obtain
+Solving for $\delta @z$, we obtain
 
 ~~~ math
-\delta z = \sum_x \frac{\partial @F}{\partial \Delta z} [@G - @F] / \sum_x \left( \frac{\partial @F}{\partial z} \right)^2
+\delta @z = \sum_x \frac{\partial @@F}{\partial \Delta @z} [@@G - @@F] / \sum_x \left( \frac{\partial @@F}{\partial @z} \right)^2
 ~~~
 
-where $\frac{\partial @F}{\partial z}$ is given by @eqn:e12.
+where $\frac{\partial @@F}{\partial @z}$ is given by @eqn:e12.
 
-On the other hand. suppose we know the distances $z_i, i = 1, 2, \dots, n$, of each of $n$ objects from camera 1, but we don't know the exact camera parameters $c$. We wish to determine the effect of changing our estimate of the camera parameters by an amount $\Delta c$. Using the linear approximation
+On the other hand. suppose we know the distances $@z_i, i = 1, 2, \dots, n$, of each of $n$ objects from camera 1, but we don't know the exact camera parameters $@c$. We wish to determine the effect of changing our estimate of the camera parameters by an amount $\Delta @c$. Using the linear approximation
 
 ~~~ math
-@F(c + \Delta c) \approx @F(c) + \Delta c \frac{\partial q}{\partial c} \frac{\partial @F}{\partial q}
+@@F(@c + \Delta @c) \approx @@F(c) + \Delta @c \frac{\partial @q}{\partial @c} \frac{\partial @@F}{\partial @q}
 ~~~
 
-we solve the minimization of the error function with respect to $\Delta c$ by setting
+we solve the minimization of the error function with respect to $\Delta @c$ by setting
 
 ~~~ math
-0 = \frac{\partial}{\partial \Delta c} \sum_i \sum_{x \varepsilon R_i} [@F(c + \Delta c) - G]^2 \approx \frac{\partial}{\partial \Delta c} \sum_i \sum_{x} [@F + \Delta c \frac{\partial q}{\partial c} \frac{\partial @F}{\partial q} - @G]^2
+0 = \frac{\partial}{\partial \Delta @c} \sum_i \sum_{x \varepsilon R_i} [@@F(@c + \Delta @c) - @@G]^2 \approx \frac{\partial}{\partial \Delta @c} \sum_i \sum_{x} [@@F + \Delta @c \frac{\partial @q}{\partial @c} \frac{\partial @@F}{\partial @q} - @@G]^2
 ~~~
 
 obtaining
 
 ~~~ math
-\Delta c \approx \left[\sum_x \left(\frac{\partial q}{\partial c} \frac{\partial @F}{\partial q} \right)^\top [@G - @F] \right] \left[ \left(\frac{\partial q}{\partial c} \frac{\partial @F}{\partial q} \right)^\top \left(\frac{\partial q}{\partial c} \frac{\partial @F}{\partial q} \right) \right]^{-1}
+\Delta @c \approx \left[\sum_x \left(\frac{\partial @q}{\partial @c} \frac{\partial @@F}{\partial @q} \right)^\top [@@G - @@F] \right] \left[ \left(\frac{\partial @q}{\partial @c} \frac{\partial @@F}{\partial @q} \right)^\top \left(\frac{\partial @q}{\partial @c} \frac{\partial @@F}{\partial @q} \right) \right]^{-1}
 ~~~
 
-As with the other techniques derived in this paper, weighting and iteration improve the solutions for $\Delta z$ and $\Delta c$ derived above.
+As with the other techniques derived in this paper, weighting and iteration improve the solutions for $\Delta @z$ and $\Delta @c$ derived above.
 
 ## An implementation {#sec5_4}
 
-We have implemented the technique described above in a system which functions well under human supervision. Our program is capable of solving for the distances to the objects, the five camera parameters described above, and a brightness and contrast parameter for the entire scene, or any subset of these parameters. As one would expect from the discussion in section @sec:sec4_3, the algorithm will converge to the correct distances and camera parameters when the initial estimates of the $z_i$'s and $c$ are sufficiently accurate that we know the position in the camera 2 film plane of each object to within a distance on the order of the size of the object. 
-
-A session with this program is illustrated in figures 4 through 10. The original stereo pair is presented in @fig:fig4. (Readers who can view stereo pairs cross-eyed will want to hold the pictures upside down so that each eye receives the correct view). The camera parameters were determined independently by hand-selecting matching points and solving for the parameters using the program described in [@Gennery1979].
-
-@fig:fig5 and @fig:fig6 are bandpass-flitered versions of the pictures in @fig:fig4. Bandpass-filtered images are preferred to lowpass-filtered images in finding matches because very low spatial frequencies tend to be a result of shading differences and carry no (or misleading) depth information. The two regions enclosed in rectangles in the left view of @fig:fig5 have been hand-selected and assigned an initial depth of $7.0$ in units of the distance between cameras. If these were the actual depths, the corresponding objects would be found in the right view at the positions indicated @fig:fig5. After seven depth-adjustment iterations, the program found the matches shown in @fig:fig6. The distances are $6.05$ for object 1 and $5.86$ for object 2.
-
-@fig:fig7 and @fig:fig8 are bandpass-filtered with a band one octave higher than @fig:fig5 and @fig:fig6. Five new points have been hand-selected in the left view, reflecting the different features which have become visible in this spatial frequency range. Each has been assigned an initial depth equal to that found for the corresponding larger region in @fig:fig6. The predicted position corresponding to these depths is shown in the right view of @fig:fig7. After five depth-adjustment iterations, the matches shown in @fig:fig8 were found. The corresponding depths are $5.96$ for object 1, $5.98$ for object 2, $5.77$ for object 3, $5.78$ for object 4, and $6.09$ for object 5.
-
-@fig:fig9 and @fig:fig10 are bandpass-filtered with a band yet another octave higher than @fig:fig7 and @fig:fig8. Again five new points have been hand-selected in the left view, reflecting the different features which have become visible in this spatial frequency range. Each has been assigned an initial depth equal to that found for the corresponding region in @fig:fig8. The predicted position corresponding to these depths is shown in the right view of @fig:fig9. After four depthadjustment iterations, the matches shown in @fig:fig10 were found. The corresponding depths are $5.97$ for object 1, $5.98$ for object 2, $5.80$ For object 3, $5.77$ for object 4, and $5.98$ for object 5.
-
-## Future research {#sec5_5}
-
-The system that we have implemented at present requires considerable hand-guidance. The following are the issues we intend to investigate toward the goal of automating the process.
-
-- Providing initial depth estimates for objects: one should be able to use approximate depths obtained from low resolution images to provide initial depth estimates for nearby objects visible only at higher resolutions. This suggests a coarse-fine paradigm not just for the problem of finding individual matches but for the problem of extracting depth infortnation as a whole.
-
-- Constructing a depth map: one could construct a depth map from depth measurements by some interpolation method, and refine the depth map with depth measurements obtained from successively higher resolution views.
-
-- Selecting points of interest: the various techniques mentioned in section @sec:sec3 should be explored.
-
-- Tracking sudden depth changes: the sudden depth changes found at the edges of objects require some set of higher-level heuristics to keep the matching algorithm on track at object boundaries.
-
-- Compensating for the different appearances of objects in the two views: the general form of the matching algorithm that allows for arbitrary linear transformations should be useful here.
-
-# Acknowledgements {#sec6}
-We would like to thank Michael Horowitz, Richard Korf, and Pradeep Sindhu for their helpful comments on early drafts of this paper.
+::: aside {.figures-aside}
 
 ::: figure {#fig4}
 ```js
@@ -497,6 +492,35 @@ html`<img src="assets/fig10.png" style="width:100%;">`;
 ```
 |
 :::
+
+:::
+
+We have implemented the technique described above in a system which functions well under human supervision. Our program is capable of solving for the distances to the objects, the five camera parameters described above, and a brightness and contrast parameter for the entire scene, or any subset of these parameters. As one would expect from the discussion in section @sec:sec4_3, the algorithm will converge to the correct distances and camera parameters when the initial estimates of the $@z_i$'s and $@c$ are sufficiently accurate that we know the position in the camera 2 film plane of each object to within a distance on the order of the size of the object. 
+
+A session with this program is illustrated in figures 4 through 10. The original stereo pair is presented in @fig:fig4. (Readers who can view stereo pairs cross-eyed will want to hold the pictures upside down so that each eye receives the correct view). The camera parameters were determined independently by hand-selecting matching points and solving for the parameters using the program described in [@Gennery1979].
+
+@fig:fig5 and @fig:fig6 are bandpass-flitered versions of the pictures in @fig:fig4. Bandpass-filtered images are preferred to lowpass-filtered images in finding matches because very low spatial frequencies tend to be a result of shading differences and carry no (or misleading) depth information. The two regions enclosed in rectangles in the left view of @fig:fig5 have been hand-selected and assigned an initial depth of $7.0$ in units of the distance between cameras. If these were the actual depths, the corresponding objects would be found in the right view at the positions indicated @fig:fig5. After seven depth-adjustment iterations, the program found the matches shown in @fig:fig6. The distances are $6.05$ for object 1 and $5.86$ for object 2.
+
+@fig:fig7 and @fig:fig8 are bandpass-filtered with a band one octave higher than @fig:fig5 and @fig:fig6. Five new points have been hand-selected in the left view, reflecting the different features which have become visible in this spatial frequency range. Each has been assigned an initial depth equal to that found for the corresponding larger region in @fig:fig6. The predicted position corresponding to these depths is shown in the right view of @fig:fig7. After five depth-adjustment iterations, the matches shown in @fig:fig8 were found. The corresponding depths are $5.96$ for object 1, $5.98$ for object 2, $5.77$ for object 3, $5.78$ for object 4, and $6.09$ for object 5.
+
+@fig:fig9 and @fig:fig10 are bandpass-filtered with a band yet another octave higher than @fig:fig7 and @fig:fig8. Again five new points have been hand-selected in the left view, reflecting the different features which have become visible in this spatial frequency range. Each has been assigned an initial depth equal to that found for the corresponding region in @fig:fig8. The predicted position corresponding to these depths is shown in the right view of @fig:fig9. After four depthadjustment iterations, the matches shown in @fig:fig10 were found. The corresponding depths are $5.97$ for object 1, $5.98$ for object 2, $5.80$ For object 3, $5.77$ for object 4, and $5.98$ for object 5.
+
+## Future research {#sec5_5}
+
+The system that we have implemented at present requires considerable hand-guidance. The following are the issues we intend to investigate toward the goal of automating the process.
+
+- Providing initial depth estimates for objects: one should be able to use approximate depths obtained from low resolution images to provide initial depth estimates for nearby objects visible only at higher resolutions. This suggests a coarse-fine paradigm not just for the problem of finding individual matches but for the problem of extracting depth infortnation as a whole.
+
+- Constructing a depth map: one could construct a depth map from depth measurements by some interpolation method, and refine the depth map with depth measurements obtained from successively higher resolution views.
+
+- Selecting points of interest: the various techniques mentioned in section @sec:sec3 should be explored.
+
+- Tracking sudden depth changes: the sudden depth changes found at the edges of objects require some set of higher-level heuristics to keep the matching algorithm on track at object boundaries.
+
+- Compensating for the different appearances of objects in the two views: the general form of the matching algorithm that allows for arbitrary linear transformations should be useful here.
+
+# Acknowledgements {#sec6}
+We would like to thank Michael Horowitz, Richard Korf, and Pradeep Sindhu for their helpful comments on early drafts of this paper.
 
 ~~~ bibliography
 @article{Barnea1972,

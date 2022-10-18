@@ -1,20 +1,17 @@
-/* :root {
-	--margin-width: 0px;
+:root {
+	/* --max-article-width: 100ex; */
+	--gap-width: 50px;
+	--margin-width: 500px;
 }
-
-@media (max-width: 1600px) {
-	:root {
-		--article-width: min(var(--max-article-width), calc(100vw - var(--article-padding) * 2 - var(--gap-width) - var(--toc-width) - var(--margin-width)));
-		--article-margin-left: max(0px, calc(((100vw + var(--toc-width) - var(--article-width) - var(--gap-width) - var(--margin-width)) / 2)));
-	}
-
-	table-of-contents {
-		display: initial;
-	}
-} */
 
 .sticky:has(#fig2) {
 	top: 32px;
+}
+
+.figures-aside {
+	max-height: calc(100vh - 2 * var(--article-padding));
+	overflow-y: auto;
+	padding-right: 12px;
 }
 
 .maug {
@@ -30,19 +27,18 @@
 	background: rgba(103, 176, 202, 0.22);
 }
 
-.maug-fx { color: blue; }
-.maug-fprimex { color: darkblue; }
+.maug-fx, .maug-ff { color: blue; }
+.maug-fprimex, .maug-q { color: darkblue; }
 .maug-fprimeprimex { color: darkslateblue; }
 .maug-fxh { color: blue; }
-.maug-gx { color: darkgreen; }
-.maug-gprimex { color: darkolivegreen; }
+.maug-gx, .maug-gg { color: darkgreen; }
+.maug-gprimex, .maug-p { color: darkolivegreen; }
 .maug-dxh { color: darkblue; }
-.maug-alpha { color: palevioletred; }
-.maug-beta { color: rebeccapurple; }
-.maug-wx { color: darkred; }
+.maug-alpha, .maug-z { color: violet; }
+.maug-beta, .maug-c { color: rebeccapurple; }
+.maug-wx, .maug-error { color: darkred; }
 .maug-h { color: purple; }
-.maug-x { color: red; }
+.maug-x, .maug-xx { color: red; }
 .maug-r { color: orange; }
-.maug-n { color: sienna; }
-.maug-m { color: sienna; }
+.maug-n, .maug-m { color: sienna; }
 .maug-a { color: darkred; }

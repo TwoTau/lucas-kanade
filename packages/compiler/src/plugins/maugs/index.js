@@ -18,7 +18,7 @@ export default function (ast) {
           let replace = parts[0].trim();
           let id = parts[1].trim() || null;
           let definition = parts[2].trim();
-          let symbol = replace[0] === "@" ? replace.slice(1) : replace;
+          let symbol = replace.replace(/^@+/, '');
           return {
             replace,
             symbol,
@@ -33,10 +33,10 @@ export default function (ast) {
 
   // TODO: sort definitions so that superstrings are before substrings
   definitions
-    .sort((b, a) => a.symbol.length - b.symbol.length)
+    .sort((b, a) => a.replace.length - b.replace.length)
     .map((d, i) => ({ ...d, id: d.id || i}));
   
-  console.log('IDs =\n', [...new Set(definitions.map(d => d.id))].join('\n'));
+  // console.log('IDs =\n', [...new Set(definitions.map(d => d.id))].join('\n'));
 
   definitions = JSON.stringify(definitions);
 
